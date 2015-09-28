@@ -1,8 +1,0 @@
-components
-windu.pos
-windu.pos.Dao
-windu.pos.DaoImpl
-windu.pos.database
-windu.pos.entity
-windu.pos.ui
-windu.pos.util
