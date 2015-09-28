@@ -39,6 +39,7 @@ public class LoginUI extends javax.swing.JFrame {
         setBackground(new java.awt.Color(255, 102, 102));
         setForeground(new java.awt.Color(204, 204, 204));
         setLocationByPlatform(true);
+        setUndecorated(true);
         setResizable(false);
 
         tfUsername.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
