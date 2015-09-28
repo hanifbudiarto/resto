@@ -37,7 +37,7 @@ public class Menu {
     public ResultSet getAllMenu () {
         MysqlConnect conn = MysqlConnect.getDbCon();
         if (conn != null) {
-            String query = "SELECT m.nama, m.harga, mk.nama as kategori_menu FROM menu m left join menu_kategori mk \n" +
+            String query = "SELECT m.nama, m.harga, mk.nama as kategori FROM menu m left join menu_kategori mk \n" +
 "on m.kategori_id = mk.kategori_id order by m.nama;";
             try {
                 ResultSet rset = conn.query(query);

@@ -6,7 +6,8 @@
 package company.pos.menu;
 
 //import company.pos.menu.Category;
-import company.pos.menu.Menu;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -14,9 +15,7 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListModel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -35,11 +34,23 @@ public class MenuUI extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         this.populateTableMenu();
         this.populateCBCategory();
+        
+        jTable1.getColumnModel().getColumn(2).setHeaderValue("kategori");
+        jTable1.getSelectedRow();
+        jTable1.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent me) { 
+                tfMenuName.setText(jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString());
+                tfPrice.setText(jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString());
+                cbCategory.setSelectedItem(jTable1.getValueAt(jTable1.getSelectedRow(), 2).toString());
+            } 
+        });        
     }
 
     private void populateTableMenu () {
         try {
-            jTable1.setModel(buildTableModel(new Menu().getAllMenu()));
+            DefaultTableModel model = buildTableModel(new Menu().getAllMenu());
+            model.fireTableDataChanged();
+            jTable1.setModel(model);
         } catch (SQLException ex) {
             Logger.getLogger(MenuUI.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -60,16 +71,16 @@ public class MenuUI extends javax.swing.JFrame {
         ResultSetMetaData metaData = rs.getMetaData();
 
         // names of columns
-        Vector<String> columnNames = new Vector<String>();
+        Vector<String> columnNames = new Vector<>();
         int columnCount = metaData.getColumnCount();
         for (int column = 1; column <= columnCount; column++) {
             columnNames.add(metaData.getColumnName(column));
         }
 
         // data of the table
-        Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+        Vector<Vector<Object>> data = new Vector<>();
         while (rs.next()) {
-            Vector<Object> vector = new Vector<Object>();
+            Vector<Object> vector = new Vector<>();
             for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
                 vector.add(rs.getObject(columnIndex));
             }
@@ -79,6 +90,7 @@ public class MenuUI extends javax.swing.JFrame {
         return new DefaultTableModel(data, columnNames);
 
     }
+   
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -100,7 +112,7 @@ public class MenuUI extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnrefresh = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -134,7 +146,12 @@ public class MenuUI extends javax.swing.JFrame {
 
         jButton2.setText("Delete");
 
-        jButton3.setText("Refresh");
+        btnrefresh.setText("Refresh");
+        btnrefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnrefreshActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -162,7 +179,7 @@ public class MenuUI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3)
+                        .addComponent(btnrefresh)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnAddMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -170,13 +187,13 @@ public class MenuUI extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tfMenuName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tfPrice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
@@ -187,7 +204,7 @@ public class MenuUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAddMenu)
-                    .addComponent(jButton3)
+                    .addComponent(btnrefresh)
                     .addComponent(jButton2)
                     .addComponent(jButton1))
                 .addContainerGap())
@@ -203,8 +220,13 @@ public class MenuUI extends javax.swing.JFrame {
         if (!menuName.isEmpty() && !price.isEmpty() && !catName.isEmpty()){
             Menu menu = new Menu();
             menu.insertMenu(menuName, price, catName);
+            this.populateTableMenu();
         }
     }//GEN-LAST:event_btnAddMenuActionPerformed
+
+    private void btnrefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnrefreshActionPerformed
+        
+    }//GEN-LAST:event_btnrefreshActionPerformed
 
     /**
      * @param args the command line arguments
@@ -243,10 +265,10 @@ public class MenuUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddMenu;
+    private javax.swing.JButton btnrefresh;
     private javax.swing.JComboBox cbCategory;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
