@@ -5,8 +5,6 @@
  */
 package company.pos.login;
 
-import company.pos.login.Login;
-
 /**
  *
  * @author M Hanif Budiarto

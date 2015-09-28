@@ -7,6 +7,7 @@ package company.pos.menu;
 
 import company.pos.database.MysqlConnect;
 import company.pos.login.Login;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,5 +32,20 @@ public class Menu {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+    
+    public ResultSet getAllMenu () {
+        MysqlConnect conn = MysqlConnect.getDbCon();
+        if (conn != null) {
+            String query = "SELECT m.nama, m.harga, mk.nama as kategori_menu FROM menu m left join menu_kategori mk \n" +
+"on m.kategori_id = mk.kategori_id order by m.nama;";
+            try {
+                ResultSet rset = conn.query(query);
+                return rset;
+            } catch (SQLException ex) {
+                Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return null;
     }
 }
