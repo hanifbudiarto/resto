@@ -19,30 +19,17 @@ public class Login {
     public Login () {
     }
     
-    public Login (String username, String password) {
+    public boolean getLogin (String username, String password) {
         MysqlConnect conn = MysqlConnect.getDbCon();
         if (conn != null) {
-            String query = "SELECT tipe_id, COUNT(*) as total FROM pengguna WHERE username = '"+username+"' and password = '"+password+"'";
+            String query = "SELECT 1 as total FROM pengguna WHERE username = '"+username+"' and password = '"+password+"'";
             try {
                 ResultSet rs = conn.query(query);
-                rs.next();
-                if (rs.getInt("total") == 1) {
-                    System.out.println ("Success");
-                    switch (rs.getInt("tipe_id")) {
-                        case 1:
-                            System.out.println("Kasir");
-                            break;
-                        case 2:
-                            System.out.println("Non Kasir");
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                else System.out.println("Failed");
+                if (rs.next()) return true;                
             } catch (SQLException ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        return false;
     }
 }

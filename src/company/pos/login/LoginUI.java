@@ -5,6 +5,11 @@
  */
 package company.pos.login;
 
+import company.pos.menu.MenuUI;
+import company.pos.user.ManageUserUI;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author M Hanif Budiarto
@@ -39,7 +44,6 @@ public class LoginUI extends javax.swing.JFrame {
         setBackground(new java.awt.Color(255, 102, 102));
         setForeground(new java.awt.Color(204, 204, 204));
         setLocationByPlatform(true);
-        setUndecorated(true);
         setResizable(false);
 
         tfUsername.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -117,7 +121,15 @@ public class LoginUI extends javax.swing.JFrame {
         String username = tfUsername.getText();
         String password = tfPassword.getText();
         if (!username.isEmpty() || !password.isEmpty()) {
-            Login login = new Login(username, password);
+            Login login = new Login();
+            if (login.getLogin(username, password)) {    
+                this.setContentPane(new MenuUI());
+                this.pack();
+                this.revalidate();
+                this.repaint();
+                this.setLocationRelativeTo(null);
+            }
+            else JOptionPane.showMessageDialog(this, "Gagal!");
         }
         else {
             System.out.println ("Username or Password is incorrect!");

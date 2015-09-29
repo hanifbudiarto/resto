@@ -6,11 +6,12 @@
             <file>file:/D:/Hanif/Project/resto/src/company/pos/user/Pengguna.java</file>
             <file>file:/D:/Hanif/Project/resto/src/company/pos/menu/Menu.java</file>
             <file>file:/D:/Hanif/Project/resto/src/company/pos/login/Login.java</file>
-            <file>file:/D:/Hanif/Project/resto/src/company/pos/menu/Menukategori.java</file>
             <file>file:/D:/Hanif/Project/resto/src/company/pos/user/ManageUserUI.java</file>
             <file>file:/D:/Hanif/Project/resto/src/company/pos/login/LoginUI.java</file>
+            <file>file:/D:/Hanif/Project/resto/src/company/pos/menu/MenuCategoryUI.java</file>
             <file>file:/D:/Hanif/Project/resto/src/company/pos/menu/MenuUI.java</file>
-            <file>file:/D:/Hanif/Project/resto/src/company/pos/menu/MenukategoriUI.java</file>
+            <file>file:/D:/Hanif/Project/resto/src/company/pos/menu/MenuKategori.java</file>
+            <file>file:/D:/Hanif/Project/resto/src/company/pos/ui/Menu.java</file>
         </group>
     </open-files>
 </project-private>

@@ -6,13 +6,10 @@
 
 package company.pos.user;
 
-import java.awt.EventQueue;
 import java.beans.Beans;
 import java.util.ArrayList;
-
 import java.util.List;
 import javax.persistence.RollbackException;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 /**
@@ -236,7 +233,7 @@ public class ManageUserUI extends JPanel {
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         int[] selected = masterTable.getSelectedRows();
-        List<company.pos.user.Pengguna> toRemove = new ArrayList<company.pos.user.Pengguna>(selected.length);
+        List<company.pos.user.Pengguna> toRemove = new ArrayList<>(selected.length);
         for (int idx = 0; idx < selected.length; idx++) {
             company.pos.user.Pengguna p = list.get(masterTable.convertRowIndexToModel(selected[idx]));
             toRemove.add(p);
@@ -259,9 +256,8 @@ public class ManageUserUI extends JPanel {
             entityManager.getTransaction().commit();
             entityManager.getTransaction().begin();
         } catch (RollbackException rex) {
-            rex.printStackTrace();
             entityManager.getTransaction().begin();
-            List<company.pos.user.Pengguna> merged = new ArrayList<company.pos.user.Pengguna>(list.size());
+            List<company.pos.user.Pengguna> merged = new ArrayList<>(list.size());
             for (company.pos.user.Pengguna p : list) {
                 merged.add(entityManager.merge(p));
             }
@@ -292,43 +288,5 @@ public class ManageUserUI extends JPanel {
     private javax.swing.JLabel usernameLabel;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
-    public static void main(String[] args) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ManageUserUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ManageUserUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ManageUserUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ManageUserUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the form */
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                JFrame frame = new JFrame();
-                frame.setContentPane(new ManageUserUI());
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.pack();
-                frame.setVisible(true); 
-                
-                // Set Frame to center of screen
-                frame.setLocationRelativeTo(null);
-            }
-        });
-    }
-    
 }
