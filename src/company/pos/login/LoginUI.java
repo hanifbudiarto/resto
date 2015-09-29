@@ -6,7 +6,12 @@
 package company.pos.login;
 
 import company.pos.cashier.CashierUI;
+import company.pos.util.DateLabelFormatter;
+import java.util.Properties;
 import javax.swing.JOptionPane;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
 
 /**
  *
@@ -19,6 +24,8 @@ public class LoginUI extends javax.swing.JFrame {
      */
     public LoginUI() {
         initComponents();
+        
+        
         setLocationRelativeTo(null);
     }
 

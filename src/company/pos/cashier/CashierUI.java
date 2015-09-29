@@ -6,6 +6,12 @@
 
 package company.pos.cashier;
 
+import company.pos.util.DateLabelFormatter;
+import java.util.Properties;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
+
 /**
  *
  * @author Muhammad Hanif B
@@ -17,6 +23,18 @@ public class CashierUI extends javax.swing.JPanel {
      */
     public CashierUI() {
         initComponents();
+        UtilDateModel model = new UtilDateModel();
+        
+        Properties p = new Properties();
+        p.put("text.today", "Today");
+        p.put("text.month", "Month");
+        p.put("text.year", "Year");
+        
+        JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
+        JDatePickerImpl datepicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+        this.add(datepicker);
+                
+                
     }
 
     /**
