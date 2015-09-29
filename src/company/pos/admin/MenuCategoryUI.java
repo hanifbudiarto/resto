@@ -4,15 +4,13 @@
  * and open the template in the editor.
  */
 
-package company.pos.menu;
+package company.pos.admin;
 
-import java.awt.EventQueue;
 import java.beans.Beans;
 import java.util.ArrayList;
 
 import java.util.List;
 import javax.persistence.RollbackException;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 /**
@@ -88,26 +86,24 @@ public class MenuCategoryUI extends JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(newButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(deleteButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(refreshButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(saveButton)
-                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(namaLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(namaField, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE))
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(newButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(deleteButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(refreshButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(saveButton))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(namaLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(namaField, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE))
+                            .addComponent(masterScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE))))
                 .addContainerGap())
         );
 
@@ -170,9 +166,9 @@ public class MenuCategoryUI extends JPanel {
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         int[] selected = masterTable.getSelectedRows();
-        List<company.pos.menu.MenuKategori> toRemove = new ArrayList<company.pos.menu.MenuKategori>(selected.length);
+        List<company.pos.admin.MenuKategori> toRemove = new ArrayList<>(selected.length);
         for (int idx = 0; idx < selected.length; idx++) {
-            company.pos.menu.MenuKategori m = list.get(masterTable.convertRowIndexToModel(selected[idx]));
+            company.pos.admin.MenuKategori m = list.get(masterTable.convertRowIndexToModel(selected[idx]));
             toRemove.add(m);
             entityManager.remove(m);
         }
@@ -180,7 +176,7 @@ public class MenuCategoryUI extends JPanel {
     }//GEN-LAST:event_deleteButtonActionPerformed
 
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
-        company.pos.menu.MenuKategori m = new company.pos.menu.MenuKategori();
+        company.pos.admin.MenuKategori m = new company.pos.admin.MenuKategori();
         entityManager.persist(m);
         list.add(m);
         int row = list.size() - 1;
@@ -195,8 +191,8 @@ public class MenuCategoryUI extends JPanel {
         } catch (RollbackException rex) {
             rex.printStackTrace();
             entityManager.getTransaction().begin();
-            List<company.pos.menu.MenuKategori> merged = new ArrayList<company.pos.menu.MenuKategori>(list.size());
-            for (company.pos.menu.MenuKategori m : list) {
+            List<company.pos.admin.MenuKategori> merged = new ArrayList<company.pos.admin.MenuKategori>(list.size());
+            for (company.pos.admin.MenuKategori m : list) {
                 merged.add(entityManager.merge(m));
             }
             list.clear();
@@ -208,7 +204,7 @@ public class MenuCategoryUI extends JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton deleteButton;
     private javax.persistence.EntityManager entityManager;
-    private java.util.List<company.pos.menu.MenuKategori> list;
+    private java.util.List<company.pos.admin.MenuKategori> list;
     private javax.swing.JScrollPane masterScrollPane;
     private javax.swing.JTable masterTable;
     private javax.swing.JTextField namaField;

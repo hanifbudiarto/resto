@@ -5,9 +5,7 @@
  */
 package company.pos.login;
 
-import company.pos.menu.MenuUI;
-import company.pos.user.ManageUserUI;
-import javax.swing.JFrame;
+import company.pos.cashier.CashierUI;
 import javax.swing.JOptionPane;
 
 /**
@@ -21,7 +19,7 @@ public class LoginUI extends javax.swing.JFrame {
      */
     public LoginUI() {
         initComponents();
-        setLocationRelativeTo(this);
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -106,8 +104,8 @@ public class LoginUI extends javax.swing.JFrame {
                         .addComponent(tfPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnLogin, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(btnLogin)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -122,8 +120,8 @@ public class LoginUI extends javax.swing.JFrame {
         String password = tfPassword.getText();
         if (!username.isEmpty() || !password.isEmpty()) {
             Login login = new Login();
-            if (login.getLogin(username, password)) {    
-                this.setContentPane(new MenuUI());
+            if (login.getLogin(username, password)) {  
+                this.setContentPane(new CashierUI());
                 this.pack();
                 this.revalidate();
                 this.repaint();

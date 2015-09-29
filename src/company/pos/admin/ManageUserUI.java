@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package company.pos.user;
+package company.pos.admin;
 
 import java.beans.Beans;
 import java.util.ArrayList;
@@ -233,9 +233,9 @@ public class ManageUserUI extends JPanel {
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         int[] selected = masterTable.getSelectedRows();
-        List<company.pos.user.Pengguna> toRemove = new ArrayList<>(selected.length);
+        List<company.pos.admin.Pengguna> toRemove = new ArrayList<>(selected.length);
         for (int idx = 0; idx < selected.length; idx++) {
-            company.pos.user.Pengguna p = list.get(masterTable.convertRowIndexToModel(selected[idx]));
+            company.pos.admin.Pengguna p = list.get(masterTable.convertRowIndexToModel(selected[idx]));
             toRemove.add(p);
             entityManager.remove(p);
         }
@@ -243,7 +243,7 @@ public class ManageUserUI extends JPanel {
     }//GEN-LAST:event_deleteButtonActionPerformed
 
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
-        company.pos.user.Pengguna p = new company.pos.user.Pengguna();
+        company.pos.admin.Pengguna p = new company.pos.admin.Pengguna();
         entityManager.persist(p);
         list.add(p);
         int row = list.size() - 1;
@@ -257,8 +257,8 @@ public class ManageUserUI extends JPanel {
             entityManager.getTransaction().begin();
         } catch (RollbackException rex) {
             entityManager.getTransaction().begin();
-            List<company.pos.user.Pengguna> merged = new ArrayList<>(list.size());
-            for (company.pos.user.Pengguna p : list) {
+            List<company.pos.admin.Pengguna> merged = new ArrayList<>(list.size());
+            for (company.pos.admin.Pengguna p : list) {
                 merged.add(entityManager.merge(p));
             }
             list.clear();
@@ -273,7 +273,7 @@ public class ManageUserUI extends JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JTextField kategoriField;
     private javax.swing.JLabel kategoriLabel;
-    private java.util.List<company.pos.user.Pengguna> list;
+    private java.util.List<company.pos.admin.Pengguna> list;
     private javax.swing.JScrollPane masterScrollPane;
     private javax.swing.JTable masterTable;
     private javax.swing.JTextField namaField;

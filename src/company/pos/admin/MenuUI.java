@@ -4,8 +4,10 @@
  * and open the template in the editor.
  */
 
-package company.pos.menu;
+package company.pos.admin;
 
+import company.pos.admin.MenuKategori;
+import company.pos.admin.Menu;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;

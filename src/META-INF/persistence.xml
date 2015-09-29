@@ -3,13 +3,13 @@
   <persistence-unit name="resto?zeroDateTimeBehavior=convertToNullPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>company.pos.ui.Pengguna</class>
-    <class>company.pos.user.Pengguna</class>
     <class>company.pos.menu.MenuKategori</class>
     <class>company.pos.ui.MenuKategori</class>
     <class>company.pos.menu.Menukategori</class>
     <class>company.pos.menu.Menukategori_1</class>
     <class>company.pos.ui.Menukategori</class>
     <class>company.pos.ui.Menu</class>
+    <class>company.pos.admin.ui.entity.Pengguna</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/resto?zeroDateTimeBehavior=convertToNull"/>
       <property name="javax.persistence.jdbc.password" value=""/>
