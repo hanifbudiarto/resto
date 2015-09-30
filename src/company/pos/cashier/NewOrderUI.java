@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
@@ -40,7 +41,11 @@ public class NewOrderUI extends javax.swing.JPanel {
             public void actionPerformed(ActionEvent e) {
                 SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
                 String date = formatter.format(dpTanggal.getDate());
-                dpTanggal.setDate(new Date(date));
+                try {
+                    dpTanggal.setDate(formatter.parse(date));
+                } catch (ParseException ex) {
+                    Logger.getLogger(NewOrderUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         try {
