@@ -41,6 +41,9 @@ public class NewOrderUI extends javax.swing.JPanel {
             public void actionPerformed(ActionEvent e) {
                 SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
                 String date = formatter.format(dpTanggal.getDate());
+                
+                // comment here
+                
                 try {
                     dpTanggal.setDate(formatter.parse(date));
                 } catch (ParseException ex) {
