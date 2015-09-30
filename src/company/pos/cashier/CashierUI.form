@@ -16,41 +16,13 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="btnNewOrder" min="-2" pref="107" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="jButton2" min="-2" pref="116" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
-          </Group>
+          <EmptySpace min="0" pref="261" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="jButton2" min="-2" pref="68" max="-2" attributes="0"/>
-                  <Component id="btnNewOrder" min="-2" pref="68" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace pref="219" max="32767" attributes="0"/>
-          </Group>
+          <EmptySpace min="0" pref="298" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
-  <SubComponents>
-    <Component class="javax.swing.JButton" name="btnNewOrder">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="PESAN BARU"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNewOrderActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="jButton2">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="LIHAT PESANAN"/>
-      </Properties>
-    </Component>
-  </SubComponents>
 </Form>
