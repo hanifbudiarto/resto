@@ -8,6 +8,9 @@ package company.pos.database;
 import com.mysql.jdbc.Connection;
 import java.sql.*;
 import java.sql.DriverManager;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MysqlConnect {
     
@@ -27,8 +30,7 @@ public class MysqlConnect {
             Class.forName(driver).newInstance();
             this.conn = (Connection)DriverManager.getConnection(url+dbName,userName,password);
         }
-        catch (Exception sqle) {
-            sqle.printStackTrace();
+        catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException sqle) {
         }
     }
     /**
@@ -40,7 +42,6 @@ public class MysqlConnect {
             db = new MysqlConnect();
         }
         return db;
- 
     }
     /**
      *
@@ -57,13 +58,36 @@ public class MysqlConnect {
      * @desc Method to insert data to a table
      * @param insertQuery String The Insert query
      * @return boolean
-     * @throws SQLException
      */
-    public int insert(String insertQuery) throws SQLException {
-        statement = db.conn.createStatement();
-        int result = statement.executeUpdate(insertQuery);
-        return result;
- 
+    public int insert(String insertQuery){
+        try {
+            statement = db.conn.createStatement();
+            int result = statement.executeUpdate(insertQuery);
+            return result;
+        } catch (SQLException ex) {
+            Logger.getLogger(MysqlConnect.class.getName()).log(Level.SEVERE, null, ex);
+            return 0;
+        }
+    }
+    
+    public int insertTransaction (List<String> queries){
+        try {
+            db.conn.setAutoCommit(false);
+            for (String query : queries) {                
+                if (this.insert(query)<=0) return 0;
+            }
+            db.conn.commit();
+            return 1;
+        } catch (SQLException ex) {
+            Logger.getLogger(MysqlConnect.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                db.conn.rollback();
+                return 0;
+            } catch (SQLException ex1) {
+                Logger.getLogger(MysqlConnect.class.getName()).log(Level.SEVERE, null, ex1);
+            }            
+        }
+        return 0;
     }
  
 }

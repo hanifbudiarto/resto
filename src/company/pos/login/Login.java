@@ -6,6 +6,7 @@
 package company.pos.login;
 
 import company.pos.database.MysqlConnect;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -21,13 +22,14 @@ public class Login {
     
     public boolean getLogin (String username, String password) {
         MysqlConnect conn = MysqlConnect.getDbCon();
-        if (conn != null) {
-            String query = "SELECT 1 as total FROM pengguna WHERE username = '"+username+"' and password = '"+password+"'";
+        if (conn != null) {            
+            String query = "/* ping */ SELECT 1 as total FROM pengguna WHERE username = '"+username+"' and password = '"+password+"'";
             try {
                 ResultSet rs = conn.query(query);
-                if (rs.next()) return true;                
+                return rs.next();
             } catch (SQLException ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                return false;
             }
         }
         return false;
