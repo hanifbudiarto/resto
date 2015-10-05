@@ -7,10 +7,14 @@
 package company.pos.cashier;
 
 import company.pos.admin.Menu;
+import company.pos.util.FrameUtil;
 import company.pos.util.TableUtil;
 import java.awt.Frame;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -24,7 +28,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /**
@@ -36,6 +39,9 @@ public class NewOrderUI extends javax.swing.JPanel {
     /**
      * Creates new form NewOrderUI
      */
+    
+    private DefaultTableModel modelOrderTable;
+    
     public NewOrderUI() {
         initComponents();
         this.initCBMenu();
@@ -50,6 +56,29 @@ public class NewOrderUI extends javax.swing.JPanel {
                 "Menu", "Qty"
             }
         ));
+        tblOrder.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent me) {
+                JTable table =(JTable) me.getSource();
+                Point p = me.getPoint();
+                int row = table.rowAtPoint(p);
+                System.err.println("row "+row);
+                if (me.getClickCount() == 2) {
+                    Object selectedObject = (Object) table.getModel().getValueAt(row, 0);
+                    System.out.println(selectedObject.toString());
+                    
+                    int dialogButton = JOptionPane.YES_NO_OPTION;
+                    int dialogResult = JOptionPane.showConfirmDialog (null, "Hapus pesanan "+selectedObject.toString()+" ?","Peringatan",dialogButton);
+                    if(dialogResult == 0){
+                        modelOrderTable = (DefaultTableModel)tblOrder.getModel();
+                        modelOrderTable.removeRow(row);
+                    }
+                }
+            }            
+                       
+        });        
+        tblOrder.setEnabled(false);
+       
     }
     
     private void initDatePicker () {
@@ -88,13 +117,7 @@ public class NewOrderUI extends javax.swing.JPanel {
         cbMenu.setModel(model);
     }
 
-    
-    
-    
-    
-    
-    
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -119,12 +142,14 @@ public class NewOrderUI extends javax.swing.JPanel {
         jLabel5 = new javax.swing.JLabel();
         tfQty = new javax.swing.JTextField();
         btnAdd = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnHome = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
-        jButton1 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnExit = new javax.swing.JButton();
+        btnMinimize = new javax.swing.JButton();
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Add New Order"));
+        setPreferredSize(new java.awt.Dimension(500, 550));
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Pesanan Baru"));
 
         tblOrder.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -137,6 +162,9 @@ public class NewOrderUI extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblOrder.setFocusable(false);
+        tblOrder.getTableHeader().setResizingAllowed(false);
+        tblOrder.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tblOrder);
 
         btnSave.setBackground(new java.awt.Color(204, 255, 204));
@@ -190,7 +218,7 @@ public class NewOrderUI extends javax.swing.JPanel {
         jLabel5.setText("Jumlah");
 
         btnAdd.setBackground(new java.awt.Color(153, 204, 255));
-        btnAdd.setText("Add");
+        btnAdd.setText("Tambah");
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddActionPerformed(evt);
@@ -228,7 +256,12 @@ public class NewOrderUI extends javax.swing.JPanel {
                 .addContainerGap(22, Short.MAX_VALUE))
         );
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/company/pos/images/home.png"))); // NOI18N
+        btnHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/company/pos/images/home.png"))); // NOI18N
+        btnHome.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHomeActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -247,7 +280,7 @@ public class NewOrderUI extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -262,7 +295,7 @@ public class NewOrderUI extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton2)
+                .addComponent(btnHome)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -277,17 +310,17 @@ public class NewOrderUI extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jButton1.setBackground(new java.awt.Color(255, 204, 204));
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnExit.setBackground(new java.awt.Color(255, 204, 204));
+        btnExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnExitActionPerformed(evt);
             }
         });
 
-        jButton3.setBackground(new java.awt.Color(255, 255, 204));
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnMinimize.setBackground(new java.awt.Color(255, 255, 204));
+        btnMinimize.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnMinimizeActionPerformed(evt);
             }
         });
 
@@ -301,9 +334,9 @@ public class NewOrderUI extends javax.swing.JPanel {
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnMinimize, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -311,8 +344,8 @@ public class NewOrderUI extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnMinimize, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -323,8 +356,8 @@ public class NewOrderUI extends javax.swing.JPanel {
          String []  newRow = new String [] {
                 cbMenu.getSelectedItem().toString(), tfQty.getText()
          };
-         DefaultTableModel model = (DefaultTableModel)tblOrder.getModel();
-         model.addRow(newRow);      
+         modelOrderTable = (DefaultTableModel)tblOrder.getModel();
+         modelOrderTable.addRow(newRow);      
          tfQty.setText("");
     }//GEN-LAST:event_btnAddActionPerformed
 
@@ -346,24 +379,29 @@ public class NewOrderUI extends javax.swing.JPanel {
         else JOptionPane.showMessageDialog(this, "Gagal!");
     }//GEN-LAST:event_btnSaveActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        topFrame.setState(Frame.ICONIFIED);
-    }//GEN-LAST:event_jButton3ActionPerformed
+    private void btnMinimizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMinimizeActionPerformed
+        FrameUtil.getCurrentFrame().setState(Frame.ICONIFIED);
+    }//GEN-LAST:event_btnMinimizeActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
         System.exit(0);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnExitActionPerformed
+
+    private void btnHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
+         JFrame ancestor = (JFrame) SwingUtilities.getWindowAncestor(this);
+         FrameUtil.setCurrentFrame(ancestor);
+         FrameUtil.resetCurrentFrame(new CashierUI());
+    }//GEN-LAST:event_btnHomeActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnExit;
+    private javax.swing.JButton btnHome;
+    private javax.swing.JButton btnMinimize;
     private javax.swing.JButton btnSave;
     private javax.swing.JComboBox cbMenu;
     private org.jdesktop.swingx.JXDatePicker dpTanggal;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
