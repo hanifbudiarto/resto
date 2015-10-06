@@ -6,7 +6,6 @@
 
 package company.pos.cashier;
 
-import company.pos.admin.Menu;
 import company.pos.util.FrameUtil;
 import company.pos.util.TableUtil;
 import java.awt.Frame;
@@ -16,7 +15,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,6 +26,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -43,37 +42,11 @@ public class PaymentUI extends javax.swing.JPanel {
     public PaymentUI() {
         initComponents();
         this.initDatePicker();
-        this.initOrderTable("");
+        this.initOrderTable("");        
+        this.addListener();        
     }
-
-    private void initOrderTable (String tableNum) {
-
-        try {
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            String date = formatter.format(dpTanggal.getDate());
-            
-            Payment payment = new Payment();
-            DefaultTableModel dtm = TableUtil.buildTableModel(payment.getAllPaymentByDate(date, tableNum));
-            int nRow = dtm.getRowCount(), nCol = dtm.getColumnCount();
-            Object[][] tableData = new Object[nRow][nCol];
-            for (int i = 0 ; i < nRow ; i++) {
-                for (int j = 0 ; j < nCol ; j++) {
-                    tableData[i][j] = dtm.getValueAt(i,j);
-                }
-            }            
-            tblPayment.setModel(new javax.swing.table.DefaultTableModel(
-                tableData,
-                new String [] {
-                    "Id", "Tanggal", "Nomor Meja", "Total"
-                }
-            ));
-            tblPayment.setEnabled(false);
-        } catch (SQLException ex) {
-            Logger.getLogger(PaymentUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-        
+    
+    private void addListener () {
         tblPayment.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent me) {
@@ -88,19 +61,28 @@ public class PaymentUI extends javax.swing.JPanel {
                     int dialogButton = JOptionPane.YES_NO_OPTION;
                     int dialogResult = JOptionPane.showConfirmDialog (null, "Lihat Pesanan Meja "+selectedObject.toString()+" ?","Peringatan",dialogButton);
                     if(dialogResult == 0){
-                        JFrame ancestor = (JFrame) SwingUtilities.getWindowAncestor(tblPayment);
-                        FrameUtil.setCurrentFrame(ancestor);
-                        
                         int saleId = (int) (Object) table.getModel().getValueAt(row, 0);
                         BigDecimal totalSale = (BigDecimal) (Object) table.getModel().getValueAt(row, 3);
                         
-                        Print printer = new Print(saleId, totalSale);
-                        FrameUtil.resetCurrentFrame(printer);
+                        PaymentPrintUI printer = new PaymentPrintUI(saleId, totalSale);                        
+                        FrameUtil.changeUI(printer, (JFrame) SwingUtilities.getWindowAncestor(tblPayment));                        
                     }
                 }
             }            
                        
         });    
+    }
+
+    private void initOrderTable (String tableNum) {
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            String date = formatter.format(dpTanggal.getDate());
+            Payment payment = new Payment();
+            DefaultTableModel dtm = TableUtil.buildTableModel(payment.getAllPaymentByDate(date, tableNum));
+            tblPayment.setModel(dtm);
+        } catch (SQLException ex) {
+            Logger.getLogger(PaymentUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void initDatePicker () {
@@ -114,7 +96,7 @@ public class PaymentUI extends javax.swing.JPanel {
                 try {
                     dpTanggal.setDate(formatter.parse(date));
                 } catch (ParseException ex) {
-                    Logger.getLogger(NewOrderUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(OrderUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
@@ -151,17 +133,7 @@ public class PaymentUI extends javax.swing.JPanel {
             }
         });
 
-        tblPayment.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
+        tblPayment.setModel(new javax.swing.table.DefaultTableModel());
         jScrollPane1.setViewportView(tblPayment);
 
         jLabel1.setText("Tanggal");
@@ -277,9 +249,7 @@ public class PaymentUI extends javax.swing.JPanel {
     }//GEN-LAST:event_btnExit1ActionPerformed
 
     private void btnHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
-        JFrame ancestor = (JFrame) SwingUtilities.getWindowAncestor(this);
-        FrameUtil.setCurrentFrame(ancestor);
-        FrameUtil.resetCurrentFrame(new CashierUI());
+        FrameUtil.changeUI(new CashierUI(), (JFrame) SwingUtilities.getWindowAncestor(this));
     }//GEN-LAST:event_btnHomeActionPerformed
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed

@@ -10,11 +10,11 @@ import company.pos.util.FrameUtil;
 import company.pos.util.TableUtil;
 import java.awt.Frame;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
@@ -22,53 +22,33 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Muhammad Hanif B
  */
-public class Print extends javax.swing.JPanel {
+public class PaymentPrintUI extends javax.swing.JPanel {
 
     /**
      * Creates new form Print
      * @param id
      * @param total
      */
+    private final int id;
+    private final BigDecimal total;
     
-    public Print(int id, BigDecimal total) {
+    public PaymentPrintUI(int id, BigDecimal total) {
         initComponents();
-        this.initOrderTable(id, total);        
-   }
+        this.id = id;
+        this.total = total;
+        this.initOrderTable();        
+    }
 
-     private void initOrderTable (int id, BigDecimal total) {
+     private void initOrderTable () {
         lblTotal.setText(total.toString());
         try {
             Payment payment = new Payment();
             DefaultTableModel dtm = TableUtil.buildTableModel(payment.getPaymentDetail(id));
-            int nRow = dtm.getRowCount(), nCol = dtm.getColumnCount();
-            Object[][] tableData = new Object[nRow][nCol];
-            for (int i = 0 ; i < nRow ; i++) {
-                for (int j = 0 ; j < nCol ; j++) {
-                    tableData[i][j] = dtm.getValueAt(i,j);
-                }
-            }            
-            tblPayment.setModel(new javax.swing.table.DefaultTableModel(
-                tableData,
-                new String [] {
-                    "Menu", "Harga", "Jumlah", "Total"
-                }
-            ));
-            tblPayment.setEnabled(false);
+            tblPayment.setModel(dtm);
         } catch (SQLException ex) {
             Logger.getLogger(PaymentUI.class.getName()).log(Level.SEVERE, null, ex);
         }          
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     /**
@@ -83,30 +63,32 @@ public class Print extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblPayment = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        btnPay = new javax.swing.JButton();
         btnHome = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel1 = new javax.swing.JLabel();
         lblTotal = new javax.swing.JLabel();
         btnMinimize1 = new javax.swing.JButton();
-        btnExit1 = new javax.swing.JButton();
+        btnExit = new javax.swing.JButton();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Cetak Pembayaran"));
 
         tblPayment.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
+            null,
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Menu", "Harga", "Jumlah", "Total"
             }
         ));
+        tblPayment.setEnabled(false);
+        tblPayment.setRowHeight(30);
         jScrollPane1.setViewportView(tblPayment);
 
-        jButton1.setText("Cetak");
+        btnPay.setText("Cetak");
+        btnPay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPayActionPerformed(evt);
+            }
+        });
 
         btnHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/company/pos/images/Back.png"))); // NOI18N
         btnHome.addActionListener(new java.awt.event.ActionListener() {
@@ -137,7 +119,7 @@ public class Print extends javax.swing.JPanel {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnPay, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addGap(71, 71, 71)
@@ -158,7 +140,7 @@ public class Print extends javax.swing.JPanel {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton1))
+                        .addComponent(btnPay))
                     .addComponent(lblTotal))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -170,10 +152,10 @@ public class Print extends javax.swing.JPanel {
             }
         });
 
-        btnExit1.setBackground(new java.awt.Color(255, 204, 204));
-        btnExit1.addActionListener(new java.awt.event.ActionListener() {
+        btnExit.setBackground(new java.awt.Color(255, 204, 204));
+        btnExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExit1ActionPerformed(evt);
+                btnExitActionPerformed(evt);
             }
         });
 
@@ -189,7 +171,7 @@ public class Print extends javax.swing.JPanel {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnMinimize1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnExit1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -197,7 +179,7 @@ public class Print extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnExit1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnMinimize1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(7, 7, 7)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -205,26 +187,34 @@ public class Print extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnExit1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExit1ActionPerformed
+    private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
         System.exit(0);
-    }//GEN-LAST:event_btnExit1ActionPerformed
+    }//GEN-LAST:event_btnExitActionPerformed
 
     private void btnMinimize1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMinimize1ActionPerformed
         FrameUtil.getCurrentFrame().setState(Frame.ICONIFIED);
     }//GEN-LAST:event_btnMinimize1ActionPerformed
 
     private void btnHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
-        JFrame ancestor = (JFrame) SwingUtilities.getWindowAncestor(this);
-        FrameUtil.setCurrentFrame(ancestor);
-        FrameUtil.resetCurrentFrame(new PaymentUI());
+        FrameUtil.changeUI(new PaymentUI(), (JFrame) SwingUtilities.getWindowAncestor(this));
     }//GEN-LAST:event_btnHomeActionPerformed
+
+    private void btnPayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPayActionPerformed
+        System.out.println(this.id);
+        Payment payment = new Payment();
+        if (payment.pay(id, total)) {
+            JOptionPane.showMessageDialog(this, "Berhasil!");
+            btnPay.setEnabled(false);
+        }
+        else { JOptionPane.showMessageDialog(this, "Gagal!"); }
+    }//GEN-LAST:event_btnPayActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnExit1;
+    private javax.swing.JButton btnExit;
     private javax.swing.JButton btnHome;
     private javax.swing.JButton btnMinimize1;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnPay;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;

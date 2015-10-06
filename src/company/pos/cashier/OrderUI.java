@@ -34,7 +34,7 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
  *
  * @author Muhammad Hanif B
  */
-public class NewOrderUI extends javax.swing.JPanel {
+public class OrderUI extends javax.swing.JPanel {
 
     /**
      * Creates new form NewOrderUI
@@ -42,20 +42,16 @@ public class NewOrderUI extends javax.swing.JPanel {
     
     private DefaultTableModel modelOrderTable;
     
-    public NewOrderUI() {
+    public OrderUI() {
         initComponents();
         this.initCBMenu();
         this.initDatePicker();
         this.initOrderTable();
+        
+        btnSave.setEnabled(tblOrder.getRowCount()>0);
     }
     
     private void initOrderTable () {
-       tblOrder.setModel(new javax.swing.table.DefaultTableModel(
-            null,
-            new String [] {
-                "Menu", "Qty"
-            }
-        ));
         tblOrder.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent me) {
@@ -72,13 +68,13 @@ public class NewOrderUI extends javax.swing.JPanel {
                     if(dialogResult == 0){
                         modelOrderTable = (DefaultTableModel)tblOrder.getModel();
                         modelOrderTable.removeRow(row);
+                        
+                        btnSave.setEnabled(tblOrder.getRowCount()>0);
                     }
                 }
             }            
                        
-        });        
-        tblOrder.setEnabled(false);
-       
+        });               
     }
     
     private void initDatePicker () {
@@ -92,7 +88,7 @@ public class NewOrderUI extends javax.swing.JPanel {
                 try {
                     dpTanggal.setDate(formatter.parse(date));
                 } catch (ParseException ex) {
-                    Logger.getLogger(NewOrderUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(OrderUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
@@ -104,7 +100,7 @@ public class NewOrderUI extends javax.swing.JPanel {
         try {
             this.populateMenu();
         } catch (SQLException ex) {
-            Logger.getLogger(NewOrderUI.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OrderUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -128,52 +124,29 @@ public class NewOrderUI extends javax.swing.JPanel {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblOrder = new javax.swing.JTable();
-        btnSave = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         dpTanggal = new org.jdesktop.swingx.JXDatePicker();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         tfMeja = new javax.swing.JTextField();
-        jPanel3 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         cbMenu = new javax.swing.JComboBox();
         jLabel5 = new javax.swing.JLabel();
         tfQty = new javax.swing.JTextField();
         btnAdd = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblOrder = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        taCatatan = new javax.swing.JTextArea();
+        jLabel3 = new javax.swing.JLabel();
+        btnSave = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
         btnHome = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         btnExit = new javax.swing.JButton();
         btnMinimize = new javax.swing.JButton();
 
-        setPreferredSize(new java.awt.Dimension(500, 550));
-
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Pesanan Baru"));
-
-        tblOrder.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        tblOrder.setFocusable(false);
-        tblOrder.getTableHeader().setResizingAllowed(false);
-        tblOrder.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(tblOrder);
-
-        btnSave.setBackground(new java.awt.Color(204, 255, 204));
-        btnSave.setText("Simpan");
-        btnSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveActionPerformed(evt);
-            }
-        });
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
@@ -187,37 +160,10 @@ public class NewOrderUI extends javax.swing.JPanel {
 
         jLabel1.setText("Nomor Meja");
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(dpTanggal, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(tfMeja, javax.swing.GroupLayout.Alignment.LEADING)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(dpTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(tfMeja, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
+        jLabel4.setText("Cari Menu");
 
-        jLabel4.setText("Cari");
+        jLabel5.setText("Jumlah yang dipesan");
 
-        jLabel5.setText("Jumlah");
-
-        btnAdd.setBackground(new java.awt.Color(153, 204, 255));
         btnAdd.setText("Tambah");
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -225,35 +171,107 @@ public class NewOrderUI extends javax.swing.JPanel {
             }
         });
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cbMenu, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5)
-                            .addComponent(tfQty, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))))
+        tblOrder.setModel(new javax.swing.table.DefaultTableModel(
+            null,
+            new String [] {
+                "Menu", "Jumlah"
+            }
+        ){public boolean isCellEditable(int row, int column){return false;}});
+        tblOrder.setFocusable(false);
+        tblOrder.setRowHeight(30);
+        tblOrder.getTableHeader().setResizingAllowed(false);
+        tblOrder.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(tblOrder);
+
+        taCatatan.setColumns(20);
+        taCatatan.setRows(5);
+        jScrollPane2.setViewportView(taCatatan);
+
+        jLabel3.setText("Catatan");
+
+        btnSave.setBackground(new java.awt.Color(204, 255, 204));
+        btnSave.setText("Cetak");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setText("Tabel Pesanan");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(tfQty))
+                                .addGap(28, 28, 28))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel4)
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(dpTanggal, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
+                                        .addComponent(tfMeja, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(cbMenu, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addGap(0, 28, Short.MAX_VALUE)))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel7))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
+                .addContainerGap())
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jLabel4)
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(11, 11, 11)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tfQty, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(dpTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tfMeja, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(tfQty, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         btnHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/company/pos/images/home.png"))); // NOI18N
@@ -268,28 +286,18 @@ public class NewOrderUI extends javax.swing.JPanel {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1)))
-                .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jSeparator1)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addContainerGap())))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -299,15 +307,8 @@ public class NewOrderUI extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(27, 27, 27)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         btnExit.setBackground(new java.awt.Color(255, 204, 204));
@@ -353,12 +354,18 @@ public class NewOrderUI extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-         String []  newRow = new String [] {
-                cbMenu.getSelectedItem().toString(), tfQty.getText()
-         };
-         modelOrderTable = (DefaultTableModel)tblOrder.getModel();
-         modelOrderTable.addRow(newRow);      
-         tfQty.setText("");
+        if (!tfQty.getText().isEmpty()) {
+            try { Integer.parseInt(tfQty.getText()); 
+                String []  newRow = new String [] {
+                       cbMenu.getSelectedItem().toString(), tfQty.getText()
+                };
+                modelOrderTable = (DefaultTableModel)tblOrder.getModel();
+                modelOrderTable.addRow(newRow);      
+                tfQty.setText("");
+                btnSave.setEnabled(tblOrder.getRowCount()>0);
+            }
+            catch (NumberFormatException ex) { JOptionPane.showMessageDialog(this, "Isikan jumlah yang dipesan dengan angka saja!"); }   
+        } else  {JOptionPane.showMessageDialog(this, "Isikan jumlah yang dipesan!");}
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void dpTanggalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dpTanggalActionPerformed
@@ -366,17 +373,27 @@ public class NewOrderUI extends javax.swing.JPanel {
     }//GEN-LAST:event_dpTanggalActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        String date = formatter.format(dpTanggal.getDate());
-        System.out.println(date);
-        
-        TableUtil tblUtil = new TableUtil(tblOrder);
-        boolean order = new Order().insertOrder(tblUtil.getTableData(), date, tfMeja.getText());
-        if (order) {            
-            JOptionPane.showMessageDialog(this, "Berhasil!");
-            this.initOrderTable();
+        if (tfMeja.getText().isEmpty()) { 
+            JOptionPane.showMessageDialog(this, "Isikan nomor meja!");            
         }
-        else JOptionPane.showMessageDialog(this, "Gagal!");
+        else if (dpTanggal.getDate() == null) {
+            JOptionPane.showMessageDialog(this, "Isikan tanggal dengan benar!");
+        }   
+        else {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");        
+            String date = formatter.format(dpTanggal.getDate());
+            System.out.println(date);
+        
+            TableUtil tblUtil = new TableUtil(tblOrder);        
+            boolean order = new Order().insertOrder(tblUtil.getTableData(), date, tfMeja.getText(), taCatatan.getText());
+            if (order) {            
+                JOptionPane.showMessageDialog(this, "Berhasil!");
+                this.initOrderTable();
+                tfMeja.setText("");
+                taCatatan.setText("");
+            }
+            else JOptionPane.showMessageDialog(this, "Gagal!");
+        }
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnMinimizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMinimizeActionPerformed
@@ -388,11 +405,18 @@ public class NewOrderUI extends javax.swing.JPanel {
     }//GEN-LAST:event_btnExitActionPerformed
 
     private void btnHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHomeActionPerformed
-         JFrame ancestor = (JFrame) SwingUtilities.getWindowAncestor(this);
-         FrameUtil.setCurrentFrame(ancestor);
-         FrameUtil.resetCurrentFrame(new CashierUI());
+         FrameUtil.changeUI(new CashierUI(), (JFrame) SwingUtilities.getWindowAncestor(this));
     }//GEN-LAST:event_btnHomeActionPerformed
-
+//        if (!tfMeja.getText().isEmpty()) {
+//            ResultSet rset = new Order().showOrderByTable(tfMeja.getText());
+//            DefaultTableModel dtm = null;
+//            try {
+//                dtm = TableUtil.buildTableModel(rset);
+//            } catch (SQLException ex) {
+//                Logger.getLogger(OrderUI.class.getName()).log(Level.SEVERE, null, ex);
+//            }      
+//            tblOrder.setModel(dtm);            
+//        }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
@@ -404,13 +428,16 @@ public class NewOrderUI extends javax.swing.JPanel {
     private org.jdesktop.swingx.JXDatePicker dpTanggal;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JTextArea taCatatan;
     private javax.swing.JTable tblOrder;
     private javax.swing.JTextField tfMeja;
     private javax.swing.JTextField tfQty;

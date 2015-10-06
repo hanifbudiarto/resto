@@ -5,23 +5,11 @@
  */
 package company.pos.login;
 
-import company.pos.admin.MenuUI;
 import company.pos.cashier.CashierUI;
-import company.pos.cashier.NewOrderUI;
 import company.pos.util.FrameUtil;
 import company.pos.util.Session;
-import java.awt.BorderLayout;
-import java.awt.Button;
 import java.awt.Frame;
-import javax.swing.InputMap;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
-import javax.swing.UIDefaults;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
 /**
  *
@@ -109,9 +97,9 @@ public class LoginUI extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -120,7 +108,7 @@ public class LoginUI extends javax.swing.JFrame {
                             .addComponent(tfPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(tfUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
-                .addGap(27, 27, 27))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -136,9 +124,9 @@ public class LoginUI extends javax.swing.JFrame {
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(tfPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jButton1.setBackground(new java.awt.Color(255, 204, 204));
@@ -195,9 +183,8 @@ public class LoginUI extends javax.swing.JFrame {
         if (!username.isEmpty() || !password.isEmpty()) {
             Login login = new Login();
             if (login.getLogin(username, password)) {                
-                Session.setUserLoggedIn(username);                
-                FrameUtil.setCurrentFrame(this);
-                FrameUtil.resetCurrentFrame(new CashierUI());                
+                Session.setUserLoggedIn(username); 
+                FrameUtil.changeUI(new CashierUI(), this);
             }
             else JOptionPane.showMessageDialog(this, "Gagal!");
         }
@@ -243,6 +230,7 @@ public class LoginUI extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new LoginUI().setVisible(true);
             }

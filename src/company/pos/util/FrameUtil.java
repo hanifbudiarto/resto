@@ -8,6 +8,7 @@ package company.pos.util;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -28,16 +29,21 @@ public class FrameUtil {
      *
      * @param currentFrame
      */
-    public static void setCurrentFrame(JFrame currentFrame) {
+    private static void setCurrentFrame(JFrame currentFrame) {
         FrameUtil.currentFrame = currentFrame;
     }
     
-    public static void resetCurrentFrame (JPanel panel) {
+    private static void resetCurrentFrame (JPanel panel) {
         currentFrame.setContentPane(panel);
         currentFrame.pack();
         currentFrame.revalidate();
         currentFrame.repaint();
         currentFrame.setLocationRelativeTo(null);
+    }
+    
+    public static void changeUI (JPanel panel, JFrame frame) {
+        setCurrentFrame(frame);
+        resetCurrentFrame(panel);
     }
     
 }

@@ -21,10 +21,10 @@ public class Order {
     public Order () {
     }
     
-    public boolean insertOrder (Object [][] order, String date, String table) {
+    public boolean insertOrder (Object [][] order, String date, String table, String note) {
         MysqlConnect conn = MysqlConnect.getDbCon();        
         if (conn != null) { 
-            String query = "INSERT INTO PENJUALAN (penjualan_tanggal, meja) VALUES ('"+date+"','"+table+"')";
+            String query = "INSERT INTO PENJUALAN (penjualan_tanggal, meja, catatan) VALUES ('"+date+"','"+table+"','"+note+"')";
             try {
                 int result = conn.insert(query);
                 if (result>0) {
@@ -53,5 +53,19 @@ public class Order {
             }
         }
         return false;
+    }
+    
+    public ResultSet showOrderByTable (String table) {
+        MysqlConnect conn = MysqlConnect.getDbCon();
+        if (conn != null) {
+            String query = "select menu, jumlah from penjualan_detail where penjualan_id = (select penjualan_id from penjualan where meja = "+table+" and ispaid = 0 order by penjualan_id desc limit 1)";
+            try {
+                return conn.query(query);
+            } catch (SQLException ex) {
+                Logger.getLogger(Order.class.getName()).log(Level.SEVERE, null, ex);
+                return null;
+            }
+        }        
+        return null;
     }
 }

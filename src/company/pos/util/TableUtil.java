@@ -44,7 +44,7 @@ public class TableUtil {
         Vector<String> columnNames = new Vector<>();
         int columnCount = metaData.getColumnCount();
         for (int column = 1; column <= columnCount; column++) {
-            columnNames.add(metaData.getColumnName(column));
+            columnNames.add(metaData.getColumnLabel(column));
         }
 
         // data of the table
