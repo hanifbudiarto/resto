@@ -33,7 +33,7 @@ group by a.penjualan_id*/
     public ResultSet getAllPaymentByDate (String date, String tableNum) {
         MysqlConnect conn = MysqlConnect.getDbCon();        
         if (conn != null) { 
-            String query = "select a.penjualan_id as id, p.penjualan_tanggal as tanggal, p.meja as 'nomor meja', sum(a.total) as total from (" +
+            String query = "select a.penjualan_id as ID, p.penjualan_tanggal as Tanggal, p.meja as 'Nomor Meja', sum(a.total) as Total from (" +
             "select pd.*, m.harga, pd.jumlah*m.harga as total from penjualan_detail pd " +
             "left join menu m " +
             "on pd.menu = m.nama ) as a left join penjualan p " +
@@ -56,7 +56,7 @@ group by a.penjualan_id*/
     public ResultSet getPaymentDetail (int saleId) {
         MysqlConnect conn = MysqlConnect.getDbCon();        
         if (conn != null) { 
-            String query = "select pd.menu as menu, m.harga, sum(pd.jumlah) as jumlah, sum(pd.jumlah*m.harga) as total from penjualan_detail pd\n" +
+            String query = "select pd.menu as Menu, m.Harga, sum(pd.jumlah) as Jumlah, sum(pd.jumlah*m.harga) as Total from penjualan_detail pd\n" +
             "left join menu m\n" +
             "on pd.menu = m.nama where pd.penjualan_id = "+saleId+" group by penjualan_id, menu";
             try {

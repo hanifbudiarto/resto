@@ -13,7 +13,7 @@ import javax.swing.SwingUtilities;
 public class CashierUI extends javax.swing.JPanel {
 
     /**
-     * Creates new form CashierUI
+     * CreaKitchenUI new form CashierUI
      */
     public CashierUI() {
         initComponents();    
@@ -183,7 +183,7 @@ public class CashierUI extends javax.swing.JPanel {
     }//GEN-LAST:event_btnPaymentActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        FrameUtil.changeUI(new LogisticUI(), (JFrame) SwingUtilities.getWindowAncestor(this));
+        FrameUtil.changeUI(new KitchenUI(), (JFrame) SwingUtilities.getWindowAncestor(this));
     }//GEN-LAST:event_jButton2ActionPerformed
 
 
