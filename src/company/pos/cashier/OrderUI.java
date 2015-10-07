@@ -51,7 +51,16 @@ public class OrderUI extends javax.swing.JPanel {
         btnSave.setEnabled(tblOrder.getRowCount()>0);
     }
     
-    private void initOrderTable () {
+    private void initOrderTable () {        
+        tblOrder.setModel(new javax.swing.table.DefaultTableModel(
+            null,
+            new String [] {
+                "Menu", "Jumlah"
+            }
+        ){@Override
+        public boolean isCellEditable(int row, int column){return false;}});
+
+        
         tblOrder.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent me) {

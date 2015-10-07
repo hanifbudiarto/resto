@@ -31,11 +31,15 @@ public class PaymentPrintUI extends javax.swing.JPanel {
      */
     private final int id;
     private final BigDecimal total;
+    private final String date;
+    private final String tableNumber;
     
-    public PaymentPrintUI(int id, BigDecimal total) {
+    public PaymentPrintUI(int id, BigDecimal total, String date, String tableNumber) {
         initComponents();
         this.id = id;
         this.total = total;
+        this.date = date;
+        this.tableNumber = tableNumber;
         this.initOrderTable();        
     }
 
@@ -43,7 +47,7 @@ public class PaymentPrintUI extends javax.swing.JPanel {
         lblTotal.setText(total.toString());
         try {
             Payment payment = new Payment();
-            DefaultTableModel dtm = TableUtil.buildTableModel(payment.getPaymentDetail(id));
+            DefaultTableModel dtm = TableUtil.buildTableModel(payment.getPaymentDetail(this.date, this.tableNumber), false);
             tblPayment.setModel(dtm);
         } catch (SQLException ex) {
             Logger.getLogger(PaymentUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -79,7 +83,6 @@ public class PaymentPrintUI extends javax.swing.JPanel {
                 "Menu", "Harga", "Jumlah", "Total"
             }
         ));
-        tblPayment.setEnabled(false);
         tblPayment.setRowHeight(30);
         jScrollPane1.setViewportView(tblPayment);
 
@@ -108,22 +111,24 @@ public class PaymentPrintUI extends javax.swing.JPanel {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnPay, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jSeparator1)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(jLabel1)
                                 .addGap(71, 71, 71)
-                                .addComponent(lblTotal)))))
+                                .addComponent(lblTotal))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnPay)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -200,11 +205,10 @@ public class PaymentPrintUI extends javax.swing.JPanel {
     }//GEN-LAST:event_btnHomeActionPerformed
 
     private void btnPayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPayActionPerformed
-        System.out.println(this.id);
         Payment payment = new Payment();
-        if (payment.pay(id, total)) {
-            JOptionPane.showMessageDialog(this, "Berhasil!");
-            btnPay.setEnabled(false);
+        boolean result = payment.pay(tableNumber, total);        
+        if (result) {
+            JOptionPane.showMessageDialog(this, "Berhasil!");            
         }
         else { JOptionPane.showMessageDialog(this, "Gagal!"); }
     }//GEN-LAST:event_btnPayActionPerformed

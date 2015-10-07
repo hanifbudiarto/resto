@@ -44,7 +44,7 @@ public class MenuUI extends javax.swing.JPanel {
 
     private void populateTableMenu () {
         try {
-            DefaultTableModel model = TableUtil.buildTableModel(new Menu().getAllMenu());
+            DefaultTableModel model = TableUtil.buildTableModel(new Menu().getAllMenu(), false);
             model.fireTableDataChanged();
             jTable1.setModel(model);
         } catch (SQLException ex) {

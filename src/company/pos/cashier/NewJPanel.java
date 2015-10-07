@@ -6,6 +6,8 @@
 
 package company.pos.cashier;
 
+import company.pos.database.MysqlConnect;
+
 /**
  *
  * @author Muhammad Hanif B
@@ -17,6 +19,12 @@ public class NewJPanel extends javax.swing.JPanel {
      */
     public NewJPanel() {
         initComponents();
+        
+        MysqlConnect conn = MysqlConnect.getDbCon();
+        if(conn!=null) {
+            String query = "update penjualan set operator='siapa saja lah' where meja=2";
+            System.out.println(conn.insert(query));
+        }
     }
 
     /**

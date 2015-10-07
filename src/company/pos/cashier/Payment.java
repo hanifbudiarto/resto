@@ -53,12 +53,12 @@ group by a.penjualan_id*/
         return null;
     }
     
-    public ResultSet getPaymentDetail (int saleId) {
+    public ResultSet getPaymentDetail (String date, String tableNum) {
         MysqlConnect conn = MysqlConnect.getDbCon();        
         if (conn != null) { 
             String query = "select pd.menu as Menu, m.Harga, sum(pd.jumlah) as Jumlah, sum(pd.jumlah*m.harga) as Total from penjualan_detail pd\n" +
             "left join menu m\n" +
-            "on pd.menu = m.nama where pd.penjualan_id = "+saleId+" group by penjualan_id, menu";
+            "on pd.menu = m.nama left join penjualan p on p.penjualan_id = pd.penjualan_id where p.penjualan_tanggal='"+date+"' and p.meja="+tableNum+" and p.ispaid = 0 group by menu";
             try {
                 ResultSet rset = conn.query(query);
                 return rset;
@@ -73,12 +73,11 @@ on pd.menu = m.nama */
         return null;
     }
     
-    public boolean pay (int saleId, BigDecimal total) {
+    public boolean pay (String tableNum, BigDecimal total) {
         MysqlConnect conn = MysqlConnect.getDbCon();
         if (conn != null) {
-            String query = "update penjualan set total ="+total+" ,ispaid = 1 ,operator ='"+Session.getUserLoggedIn()+"' where penjualan_id="+saleId;
-            System.out.println(query);
-            return conn.insert(query)>0;            
+            String query = "update penjualan set total ="+total+" ,ispaid=1 ,operator='"+Session.getUserLoggedIn()+"' where meja="+tableNum;             
+            return conn.insert(query)>0;
         }
         return false;
     }

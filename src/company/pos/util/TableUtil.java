@@ -35,7 +35,7 @@ public class TableUtil {
         return tableData;
     }
     
-    public static DefaultTableModel buildTableModel(ResultSet rs)
+    public static DefaultTableModel buildTableModel(ResultSet rs, final boolean isEditable)
         throws SQLException {
 
         ResultSetMetaData metaData = rs.getMetaData();
@@ -57,7 +57,8 @@ public class TableUtil {
             data.add(vector);
         }
 
-        return new DefaultTableModel(data, columnNames);
+        return new DefaultTableModel(data, columnNames){@Override
+ public boolean isCellEditable (int row, int column){ return isEditable; }};
     }
     
 }

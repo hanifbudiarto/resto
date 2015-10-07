@@ -67,6 +67,12 @@ public class MysqlConnect {
         } catch (SQLException ex) {
             Logger.getLogger(MysqlConnect.class.getName()).log(Level.SEVERE, null, ex);
             return 0;
+        } finally {
+            try {                
+                statement.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(MysqlConnect.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     

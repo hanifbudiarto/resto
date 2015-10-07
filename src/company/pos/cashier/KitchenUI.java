@@ -45,13 +45,14 @@ public class KitchenUI extends javax.swing.JPanel {
     public KitchenUI() {
         initComponents();
         dtm = (DefaultTableModel) tblBelanja.getModel();
-        tblBelanja.setAutoCreateRowSorter(false);
+        
         this.initTblBelanja();
         this.initDatePicker();
     }
         
     private void initTblBelanja () {
         ((DefaultCellEditor) tblBelanja.getDefaultEditor(Object.class)).setClickCountToStart(1);
+        tblBelanja.setAutoCreateRowSorter(false);
         tblBelanja.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent me) {
@@ -100,7 +101,7 @@ public class KitchenUI extends javax.swing.JPanel {
             if (tblBelanja.getValueAt(i, tabLen-3).toString().isEmpty() ||
                     tblBelanja.getValueAt(i, tabLen-2).toString().isEmpty()) {
                 tblBelanja.setValueAt(null, i, tabLen-1);
-                break;
+                continue;
             }
             
             BigInteger price = new BigInteger(tblBelanja.getValueAt(i, tabLen-3).toString());
@@ -121,29 +122,22 @@ public class KitchenUI extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnExit = new javax.swing.JButton();
+        btnMinimize = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        btnHome = new javax.swing.JButton();
+        btnAdd = new javax.swing.JButton();
+        btnEditMode = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
+        jLabel1 = new javax.swing.JLabel();
         dpTanggal = new org.jdesktop.swingx.JXDatePicker();
+        jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblBelanja = new javax.swing.JTable();
         lblTotalAll = new javax.swing.JLabel();
-        btnExit = new javax.swing.JButton();
-        btnMinimize = new javax.swing.JButton();
-        btnHome = new javax.swing.JButton();
-        btnAdd = new javax.swing.JButton();
-        btnSave = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
         btnCalculate = new javax.swing.JButton();
-        btnEditMode = new javax.swing.JButton();
-
-        tblBelanja.setModel(new javax.swing.table.DefaultTableModel(
-            null,
-            new String [] {
-                "Barang", "Satuan", "Harga", "Jumlah", "Total"
-            }
-        ));
-        tblBelanja.setCellSelectionEnabled(true);
-        tblBelanja.setRowHeight(30);
-        jScrollPane1.setViewportView(tblBelanja);
-
-        lblTotalAll.setText("jLabel1");
+        btnSave = new javax.swing.JButton();
 
         btnExit.setBackground(new java.awt.Color(255, 204, 204));
         btnExit.addActionListener(new java.awt.event.ActionListener() {
@@ -159,6 +153,8 @@ public class KitchenUI extends javax.swing.JPanel {
             }
         });
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Belanja"));
+
         btnHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/company/pos/images/home.png"))); // NOI18N
         btnHome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -166,33 +162,115 @@ public class KitchenUI extends javax.swing.JPanel {
             }
         });
 
-        btnAdd.setText("jButton1");
+        btnAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/company/pos/images/add.png"))); // NOI18N
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddActionPerformed(evt);
             }
         });
 
-        btnSave.setText("jButton1");
-        btnSave.addActionListener(new java.awt.event.ActionListener() {
+        btnEditMode.setIcon(new javax.swing.ImageIcon(getClass().getResource("/company/pos/images/delete.png"))); // NOI18N
+        btnEditMode.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveActionPerformed(evt);
+                btnEditModeActionPerformed(evt);
             }
         });
 
-        btnCalculate.setText("jButton1");
+        jLabel1.setText("Tanggal");
+
+        jLabel2.setText("Tabel Belanja");
+
+        tblBelanja.setModel(new javax.swing.table.DefaultTableModel(
+            null,
+            new String [] {
+                "Barang", "Satuan", "Harga", "Jumlah", "Total"
+            }
+        ));
+        tblBelanja.setCellSelectionEnabled(true);
+        tblBelanja.setRowHeight(30);
+        jScrollPane1.setViewportView(tblBelanja);
+
+        lblTotalAll.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblTotalAll.setText("-");
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel3.setText("Total Rp. ");
+
+        btnCalculate.setText("Hitung Biaya Total");
         btnCalculate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCalculateActionPerformed(evt);
             }
         });
 
-        btnEditMode.setText("jButton1");
-        btnEditMode.addActionListener(new java.awt.event.ActionListener() {
+        btnSave.setText("Simpan");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditModeActionPerformed(evt);
+                btnSaveActionPerformed(evt);
             }
         });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator1)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnEditMode, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel1)
+                            .addComponent(dpTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 624, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblTotalAll)
+                                .addGap(14, 14, 14)
+                                .addComponent(btnCalculate))
+                            .addComponent(btnSave, javax.swing.GroupLayout.Alignment.TRAILING))))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnEditMode, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(btnHome, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnAdd, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(dpTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblTotalAll)
+                    .addComponent(jLabel3)
+                    .addComponent(btnCalculate))
+                .addGap(18, 18, 18)
+                .addComponent(btnSave)
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -200,52 +278,25 @@ public class KitchenUI extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnSave)
-                        .addGap(21, 21, 21))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnAdd)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnEditMode)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnMinimize, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(dpTanggal, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblTotalAll)
-                                .addGap(56, 56, 56)
-                                .addComponent(btnCalculate)))
-                        .addContainerGap(15, Short.MAX_VALUE))))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnMinimize, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnEditMode, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnMinimize, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnHome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(dpTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnMinimize, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(23, 23, 23)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblTotalAll)
-                    .addComponent(btnCalculate))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
-                .addComponent(btnSave))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -296,13 +347,24 @@ public class KitchenUI extends javax.swing.JPanel {
     }//GEN-LAST:event_btnCalculateActionPerformed
 
     private void btnEditModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditModeActionPerformed
+        btnHome.setEnabled(!btnHome.isEnabled());
+        btnAdd.setEnabled(!btnAdd.isEnabled());
+        btnSave.setEnabled(!btnSave.isEnabled());
+        btnCalculate.setEnabled(!btnCalculate.isEnabled());
+        dpTanggal.setEnabled(!dpTanggal.isEnabled());
+        
         TableCellEditor editor = tblBelanja.getCellEditor();
         if (editor != null) {
           editor.stopCellEditing();
         }
-        tblBelanja.setCellSelectionEnabled(!tblBelanja.getCellSelectionEnabled());
-        tblBelanja.setRowSelectionAllowed(!tblBelanja.getRowSelectionAllowed());
-        ((DefaultCellEditor) tblBelanja.getDefaultEditor(Object.class)).setClickCountToStart(tblBelanja.getRowSelectionAllowed() ? 1000 : 1);
+        
+        if (tblBelanja.getCellSelectionEnabled()) {
+            tblBelanja.setCellSelectionEnabled(false);
+            tblBelanja.setRowSelectionAllowed(true);  
+        } else {
+            tblBelanja.setCellSelectionEnabled(true);
+        }      
+        ((DefaultCellEditor) tblBelanja.getDefaultEditor(Object.class)).setClickCountToStart(tblBelanja.getCellSelectionEnabled()? 1 : 1000);
     }//GEN-LAST:event_btnEditModeActionPerformed
     
     
@@ -315,7 +377,12 @@ public class KitchenUI extends javax.swing.JPanel {
     private javax.swing.JButton btnMinimize;
     private javax.swing.JButton btnSave;
     private org.jdesktop.swingx.JXDatePicker dpTanggal;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblTotalAll;
     private javax.swing.JTable tblBelanja;
     // End of variables declaration//GEN-END:variables

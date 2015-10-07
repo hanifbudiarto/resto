@@ -26,7 +26,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -60,11 +59,13 @@ public class PaymentUI extends javax.swing.JPanel {
                     
                     int dialogButton = JOptionPane.YES_NO_OPTION;
                     int dialogResult = JOptionPane.showConfirmDialog (null, "Lihat Pesanan Meja "+selectedObject.toString()+" ?","Peringatan",dialogButton);
-                    if(dialogResult == 0){
-                        int saleId = (int) (Object) table.getModel().getValueAt(row, 0);
-                        BigDecimal totalSale = (BigDecimal) (Object) table.getModel().getValueAt(row, 3);
+                    if(dialogResult == 0){                       
+                        int saleId = Integer.parseInt(table.getModel().getValueAt(row, 0).toString());
+                        BigDecimal totalSale = new BigDecimal(table.getModel().getValueAt(row, 3).toString());
                         
-                        PaymentPrintUI printer = new PaymentPrintUI(saleId, totalSale);                        
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                        String date = formatter.format(dpTanggal.getDate());
+                        PaymentPrintUI printer = new PaymentPrintUI(saleId, totalSale, date, selectedObject.toString());   
                         FrameUtil.changeUI(printer, (JFrame) SwingUtilities.getWindowAncestor(tblPayment));                        
                     }
                 }
@@ -78,7 +79,7 @@ public class PaymentUI extends javax.swing.JPanel {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             String date = formatter.format(dpTanggal.getDate());
             Payment payment = new Payment();
-            DefaultTableModel dtm = TableUtil.buildTableModel(payment.getAllPaymentByDate(date, tableNum));
+            DefaultTableModel dtm = TableUtil.buildTableModel(payment.getAllPaymentByDate(date, tableNum), false);
             tblPayment.setModel(dtm);
         } catch (SQLException ex) {
             Logger.getLogger(PaymentUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -133,7 +134,7 @@ public class PaymentUI extends javax.swing.JPanel {
             }
         });
 
-        tblPayment.setModel(new javax.swing.table.DefaultTableModel());
+        tblPayment.setModel(new javax.swing.table.DefaultTableModel(){public boolean isCellEditable (int row, int column) {return false;}});
         jScrollPane1.setViewportView(tblPayment);
 
         jLabel1.setText("Tanggal");
