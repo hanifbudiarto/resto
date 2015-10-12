@@ -18,34 +18,51 @@ import java.util.logging.Logger;
  * @author Muhammad Hanif B
  */
 public class Order {
+    
+    
+    private final ArrayList<String> parameter;
+    private final ArrayList<ArrayList<String>> paramTransaction;
+    
     public Order () {
+        this.parameter = new ArrayList<>();
+        this.paramTransaction = new ArrayList<>();
     }
     
     public boolean insertOrder (Object [][] order, String date, String table, String note) {
         MysqlConnect conn = MysqlConnect.getDbCon();        
         if (conn != null) { 
-            String query = "INSERT INTO PENJUALAN (penjualan_tanggal, meja, catatan) VALUES ('"+date+"','"+table+"','"+note+"')";
+            String query = "INSERT INTO PENJUALAN (penjualan_tanggal, meja, catatan) VALUES (?,?,?)";
+            parameter.clear();
+            parameter.add(date);
+            parameter.add(table);
+            parameter.add(note);
             try {
-                int result = conn.insert(query);
-                if (result>0) {
+                boolean result = conn.insert(query, parameter);
+                if (result) {
                     query = "SELECT LAST_INSERT_ID()";
-                    ResultSet rset = conn.query(query);
+                    ResultSet rset = conn.query(query, null);
                     int lastInsertedId = 0;
                     while (rset.next()) {
                         lastInsertedId = rset.getInt(1);
                         break;
                     }              
-                    ArrayList<String> alist = new ArrayList<>();  
+                    parameter.clear();
                     int rowLength = order.length;
                     for (int i=0; i<rowLength; i++){
-                        alist.add("INSERT INTO PENJUALAN_DETAIL (penjualan_id,menu,jumlah) VALUES ("+lastInsertedId+",'"+order[i][0]+"',"+order[i][1]+")");
+                        parameter.add("INSERT INTO PENJUALAN_DETAIL (penjualan_id,menu,jumlah) VALUES (?,?,?)");                        
+                        ArrayList<String> temp = new ArrayList<>();
+                        temp.add(Integer.toString(lastInsertedId));
+                        temp.add((String) order[i][0]);
+                        temp.add((String) order[i][1]);
+                        paramTransaction.add(temp);
                     }
-                    int finalResult = conn.insertTransaction(alist);
-                    if (finalResult<=0) {
+                    boolean finalResult = conn.insertTransaction(parameter, paramTransaction);
+                    if (!finalResult) {
+                        
                         query = "DELETE from PENJUALAN WHERE penjualan_id = "+lastInsertedId;
-                        return conn.insert(query)>0;
-                    }
-                    return finalResult>0;
+                        return conn.updateOrDelete(query);
+                    }                    
+                    return finalResult;
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(Order.class.getName()).log(Level.SEVERE, null, ex);
@@ -58,9 +75,11 @@ public class Order {
     public ResultSet showOrderByTable (String table) {
         MysqlConnect conn = MysqlConnect.getDbCon();
         if (conn != null) {
-            String query = "select menu, jumlah from penjualan_detail where penjualan_id = (select penjualan_id from penjualan where meja = "+table+" and ispaid = 0 order by penjualan_id desc limit 1)";
+            String query = "select menu, jumlah from penjualan_detail where penjualan_id = (select penjualan_id from penjualan where meja = ? and ispaid = 0 order by penjualan_id desc limit 1)";
+            parameter.clear();
+            parameter.add(table);
             try {
-                return conn.query(query);
+                return conn.query(query, parameter);
             } catch (SQLException ex) {
                 Logger.getLogger(Order.class.getName()).log(Level.SEVERE, null, ex);
                 return null;

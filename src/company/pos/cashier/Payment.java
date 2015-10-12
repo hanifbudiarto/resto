@@ -11,6 +11,7 @@ import company.pos.util.Session;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,7 +29,11 @@ on a.penjualan_id = p.penjualan_id
 where p.penjualan_tanggal = "2015-10-05"
 group by a.penjualan_id*/
     
-    public Payment () {}
+    private final ArrayList<String> parameter;
+    
+    public Payment () {
+        this.parameter = new ArrayList<>();
+    }
     
     public ResultSet getAllPaymentByDate (String date, String tableNum) {
         MysqlConnect conn = MysqlConnect.getDbCon();        
@@ -38,12 +43,18 @@ group by a.penjualan_id*/
             "left join menu m " +
             "on pd.menu = m.nama ) as a left join penjualan p " +
             "on a.penjualan_id = p.penjualan_id " +
-            "where p.penjualan_tanggal = '"+date+"' and p.ispaid = 0";
-            if (tableNum.length() != 0) { query += " and p.meja = "+ tableNum; }
+            "where p.penjualan_tanggal = ? and p.ispaid = 0";
+            parameter.clear();
+            parameter.add(date);            
+            
+            if (tableNum.length() != 0) { 
+                query += " and p.meja = ?"; 
+                parameter.add(tableNum);
+            }
             query += " group by p.meja";
 
             try {
-                ResultSet rset = conn.query(query);
+                ResultSet rset = conn.query(query, parameter);
                 return rset;
             } catch (SQLException ex) {
                 Logger.getLogger(Order.class.getName()).log(Level.SEVERE, null, ex);
@@ -58,9 +69,12 @@ group by a.penjualan_id*/
         if (conn != null) { 
             String query = "select pd.menu as Menu, m.Harga, sum(pd.jumlah) as Jumlah, sum(pd.jumlah*m.harga) as Total from penjualan_detail pd\n" +
             "left join menu m\n" +
-            "on pd.menu = m.nama left join penjualan p on p.penjualan_id = pd.penjualan_id where p.penjualan_tanggal='"+date+"' and p.meja="+tableNum+" and p.ispaid = 0 group by menu";
+            "on pd.menu = m.nama left join penjualan p on p.penjualan_id = pd.penjualan_id where p.penjualan_tanggal=? and p.meja=? and p.ispaid = 0 group by menu";
+            parameter.clear();
+            parameter.add(date);
+            parameter.add(tableNum);
             try {
-                ResultSet rset = conn.query(query);
+                ResultSet rset = conn.query(query, parameter);
                 return rset;
             } catch (SQLException ex) {
                 Logger.getLogger(Order.class.getName()).log(Level.SEVERE, null, ex);
@@ -76,8 +90,8 @@ on pd.menu = m.nama */
     public boolean pay (String tableNum, BigDecimal total) {
         MysqlConnect conn = MysqlConnect.getDbCon();
         if (conn != null) {
-            String query = "update penjualan set total ="+total+" ,ispaid=1 ,operator='"+Session.getUserLoggedIn()+"' where meja="+tableNum;             
-            return conn.insert(query)>0;
+            String query = "update penjualan set total ="+total.toString()+" ,ispaid=1 ,operator='"+Session.getUserLoggedIn()+"' where meja="+tableNum;             
+            return conn.updateOrDelete(query);
         }
         return false;
     }

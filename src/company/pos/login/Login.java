@@ -8,6 +8,7 @@ package company.pos.login;
 import company.pos.database.MysqlConnect;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,21 +17,25 @@ import java.util.logging.Logger;
  * @author M Hanif Budiarto
  */
 public class Login {
-    public Login () {
-    }
+    public Login () { }
     
-    public boolean getLogin (String username, String password) {
-        MysqlConnect conn = MysqlConnect.getDbCon();
-        if (conn != null) {            
-            String query = "/* ping */ SELECT 1 as total FROM pengguna WHERE username = '"+username+"' and password = '"+password+"'";
+    public String getLogin (String username, String password) {
+        String category = "";
+        
+        MysqlConnect conn = MysqlConnect.getDbCon();        
+        if (conn != null) {       
+            String query = "SELECT kategori as total FROM pengguna WHERE username = ? and password = ?";
+            ArrayList<String> parameter = new ArrayList<>();
+            parameter.add(username);
+            parameter.add(password);
             try {
-                ResultSet rs = conn.query(query);
-                return rs.next();
+                ResultSet rs = conn.query(query, parameter);
+                rs.next();
+                category = rs.getString(1);                
             } catch (SQLException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-                return false;
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);                
             }
         }
-        return false;
+        return category;
     }
 }

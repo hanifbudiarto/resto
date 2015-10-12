@@ -124,7 +124,7 @@ public class MenuKategori implements Serializable {
             try {
                 String query = "SELECT nama FROM menu_kategori";
                 
-                ResultSet rs = conn.query(query);
+                ResultSet rs = conn.query(query, null);
                 List<String> list = new ArrayList<>();
                 while (rs.next()) {
                     list.add(rs.getString("nama"));

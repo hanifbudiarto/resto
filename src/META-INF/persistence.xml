@@ -10,6 +10,9 @@
     <class>company.pos.ui.Menukategori</class>
     <class>company.pos.ui.Menu</class>
     <class>company.pos.admin.ui.entity.Pengguna</class>
+    <class>company.pos.admin.Pengguna</class>
+    <class>company.pos.admin.MenuKategori</class>
+    <class>company.pos.admin.Menu</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/resto?zeroDateTimeBehavior=convertToNull"/>
       <property name="javax.persistence.jdbc.password" value=""/>

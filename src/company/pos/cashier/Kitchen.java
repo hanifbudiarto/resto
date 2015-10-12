@@ -18,34 +18,51 @@ import java.util.logging.Logger;
  * @author Muhammad Hanif B
  */
 public class Kitchen {
-    public Kitchen () {}
+    
+    private final ArrayList<String> parameter;
+    private final ArrayList<ArrayList<String>> paramTransaction;
+    
+    public Kitchen () {
+        this.parameter = new ArrayList<>();
+        this.paramTransaction = new ArrayList<>();
+    }
     
     public boolean insertLogistic (Object [][] logistic, String date) {
         MysqlConnect conn = MysqlConnect.getDbCon();        
         if (conn != null) { 
-            String query = "INSERT INTO PEMBELIAN (pembelian_tanggal) VALUES ('"+date+"')";
+            String query = "INSERT INTO PEMBELIAN (pembelian_tanggal) VALUES (?)";
+            parameter.clear();
+            parameter.add(date);
             try {
-                int result = conn.insert(query);
-                if (result>0) {
+                boolean result = conn.insert(query, parameter);
+                if (result) {
                     query = "SELECT LAST_INSERT_ID()";
-                    ResultSet rset = conn.query(query);
-                    int lastInsertedId = 0;
+                    ResultSet rset = conn.query(query, null);
+                    String lastInsertedId = "";
                     while (rset.next()) {
-                        lastInsertedId = rset.getInt(1);
+                        lastInsertedId = Integer.toString(rset.getInt(1));
                         break;
                     }              
-                    ArrayList<String> alist = new ArrayList<>();  
+                    parameter.clear();
+                    paramTransaction.clear();
                     int rowLength = logistic.length;
                     for (int i=0; i<rowLength; i++){
-                        alist.add("INSERT INTO PEMBELIAN_DETAIL (pembelian_id,nama_barang,satuan,harga,jumlah) VALUES" + 
-                                "("+lastInsertedId+",'"+logistic[i][0]+"','"+logistic[i][1]+"',"+logistic[i][2]+","+logistic[i][3]+")");
+                        parameter.add("INSERT INTO PEMBELIAN_DETAIL (pembelian_id,nama_barang,satuan,harga,jumlah) VALUES (?,?,?,?,?)");
+                        ArrayList<String> temp = new ArrayList<>();
+                        temp.add(lastInsertedId);
+                        temp.add(logistic[i][0].toString());
+                        temp.add(logistic[i][1].toString());
+                        temp.add(logistic[i][2].toString());
+                        temp.add(logistic[i][3].toString());
+                        
+                        paramTransaction.add(temp);
                     }
-                    int finalResult = conn.insertTransaction(alist);
-                    if (finalResult<=0) {
+                    boolean finalResult = conn.insertTransaction(parameter, paramTransaction);
+                    if (!finalResult) {                        
                         query = "DELETE from PEMBELIAN WHERE pembelian_id = "+lastInsertedId;
-                        return conn.insert(query)>0;
+                        return conn.updateOrDelete(query);
                     }
-                    return finalResult>0;
+                    return finalResult;
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(Order.class.getName()).log(Level.SEVERE, null, ex);
