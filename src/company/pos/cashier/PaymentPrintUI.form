@@ -170,7 +170,7 @@
             </Container>
             <Component class="javax.swing.JButton" name="btnPay">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Cetak"/>
+                <Property name="text" type="java.lang.String" value="Bayar"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPayActionPerformed"/>

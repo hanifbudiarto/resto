@@ -107,7 +107,7 @@ public class PaymentPrintUI extends javax.swing.JPanel {
         tblPayment.setRowHeight(30);
         jScrollPane1.setViewportView(tblPayment);
 
-        btnPay.setText("Cetak");
+        btnPay.setText("Bayar");
         btnPay.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPayActionPerformed(evt);

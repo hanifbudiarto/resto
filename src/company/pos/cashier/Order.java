@@ -28,7 +28,7 @@ public class Order {
         this.paramTransaction = new ArrayList<>();
     }
     
-    public boolean insertOrder (Object [][] order, String date, String table, String note) {
+    public int insertOrder (Object [][] order, String date, String table, String note) {
         MysqlConnect conn = MysqlConnect.getDbCon();        
         if (conn != null) { 
             String query = "INSERT INTO PENJUALAN (penjualan_tanggal, meja, catatan) VALUES (?,?,?)";
@@ -60,16 +60,18 @@ public class Order {
                     if (!finalResult) {
                         
                         query = "DELETE from PENJUALAN WHERE penjualan_id = "+lastInsertedId;
-                        return conn.updateOrDelete(query);
-                    }                    
-                    return finalResult;
+                        conn.updateOrDelete(query);
+//                        return conn.updateOrDelete(query);
+                    }                  
+                    if (finalResult) return lastInsertedId;
+//                    return finalResult;
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(Order.class.getName()).log(Level.SEVERE, null, ex);
-                return false;
+                return -1;
             }
         }
-        return false;
+        return -1;
     }
     
     public ResultSet showOrderByTable (String table) {

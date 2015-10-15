@@ -7,6 +7,7 @@
 package company.pos.cashier;
 
 import company.pos.admin.MyMenu;
+import company.pos.database.MysqlConnect;
 import company.pos.util.FrameUtil;
 import company.pos.util.TableUtil;
 import java.awt.Frame;
@@ -28,6 +29,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
+import net.sf.dynamicreports.report.builder.DynamicReports;
+import net.sf.dynamicreports.report.builder.column.Columns;
+import net.sf.dynamicreports.report.builder.component.Components;
+import net.sf.dynamicreports.report.builder.datatype.DataTypes;
+import net.sf.dynamicreports.report.exception.DRException;
+import net.sf.jasperreports.view.JasperViewer;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /**
@@ -195,7 +203,7 @@ public class OrderUI extends javax.swing.JPanel {
         jLabel1.setText("Nomor Meja");
 
         btnSave.setBackground(new java.awt.Color(204, 255, 204));
-        btnSave.setText("Cetak");
+        btnSave.setText("Simpan Pesanan");
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveActionPerformed(evt);
@@ -285,10 +293,11 @@ public class OrderUI extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2)
+                        .addComponent(jLabel1)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -386,10 +395,11 @@ public class OrderUI extends javax.swing.JPanel {
             System.out.println(date);
         
             TableUtil tblUtil = new TableUtil(tblOrder);        
-            boolean order = new Order().insertOrder(tblUtil.getTableData(), date, tfMeja.getText(), taCatatan.getText());
-            if (order) {            
+            int order = new Order().insertOrder(tblUtil.getTableData(), date, tfMeja.getText(), taCatatan.getText());
+            if (order >= 0) {            
                 JOptionPane.showMessageDialog(this, "Berhasil!");
                 this.initOrderTable();
+                this.showOrderPdf(order, tfMeja.getText(), taCatatan.getText());
                 tfMeja.setText("");
                 taCatatan.setText("");
             }
@@ -397,6 +407,31 @@ public class OrderUI extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnSaveActionPerformed
 
+    private void showOrderPdf (int orderid, String tableNum, String note) {
+        try {
+            MysqlConnect conn = MysqlConnect.getDbCon();
+            JasperReportBuilder report = DynamicReports.report();
+            try {
+                report
+                        .columns(
+                                Columns.column("Menu yang dipesan", "menu", DataTypes.stringType()),
+                                Columns.column("Jumlah", "jumlah", DataTypes.stringType())                                
+                        )
+                        .title (
+                                Components.text("Pesanan Meja "+tableNum)
+                        )
+                        .pageFooter(Components.pageXofY())
+                        .setDataSource(conn.query("select menu, jumlah from penjualan_detail where penjualan_id = "+orderid, null));
+                JasperViewer viewer = new JasperViewer(report.toJasperPrint(), false);
+                viewer.setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(OrderUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (DRException ex) {
+            Logger.getLogger(OrderUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     private void btnMinimizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMinimizeActionPerformed
         FrameUtil.getCurrentFrame().setState(Frame.ICONIFIED);
     }//GEN-LAST:event_btnMinimizeActionPerformed
@@ -418,7 +453,7 @@ public class OrderUI extends javax.swing.JPanel {
 //            }      
 //            tblOrder.setModel(dtm);            
 //        }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnExit;

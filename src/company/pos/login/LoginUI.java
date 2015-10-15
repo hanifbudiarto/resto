@@ -26,17 +26,6 @@ public class LoginUI extends javax.swing.JFrame {
      */
     public LoginUI(){
         initComponents();
-//        UIManager.put("Button.focusInputMap", new UIDefaults.LazyInputMap(new Object[]
-//        {
-//          "ENTER", "pressed",
-//          "released ENTER", "released"
-//        }));
-//        InputMap im = (InputMap)UIManager.get("Button.focusInputMap");
-//        im.put( KeyStroke.getKeyStroke( "ENTER" ), "pressed" );
-//        im.put( KeyStroke.getKeyStroke( "released ENTER" ), "released" );
-//
-//        this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
-//        this.setVisible(true);
         tfUsername.requestFocus();
         PromptSupport.setPrompt("Username", tfUsername);
         PromptSupport.setPrompt("Password", tfPassword);
@@ -205,7 +194,7 @@ public class LoginUI extends javax.swing.JFrame {
                 }
                 FrameUtil.changeUI(nextPanel, this);
             }
-            else JOptionPane.showMessageDialog(this, "Gagal Menyambungkan!");
+            else JOptionPane.showMessageDialog(this, "Gagal!");
         }
         else {
             JOptionPane.showMessageDialog(this, "Username atau Password tidak cocok!");           

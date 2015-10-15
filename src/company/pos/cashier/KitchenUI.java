@@ -92,11 +92,19 @@ public class KitchenUI extends javax.swing.JPanel {
         });
     }
 
-    private void calculateTotal () {
+    
+    // checking 
+    private boolean calculateTotal () {
         BigInteger totalAll = BigInteger.ZERO;
         int tabLen = tblBelanja.getColumnCount();
         int rowCount = tblBelanja.getRowCount();
         for (int i=0; i<rowCount; i++){
+//            if (tblBelanja.getValueAt(i, 0).toString()) return false;
+            if(tblBelanja.getValueAt(i, 0)== null || 
+                    tblBelanja.getValueAt(i, 1) == null ||
+                    tblBelanja.getValueAt(i, 2) == null ||
+                    tblBelanja.getValueAt(i, 3) == null) return false;
+            
             try {
                 String priceStr = tblBelanja.getValueAt(i, tabLen-3).toString();
                 String qtyStr = tblBelanja.getValueAt(i, tabLen-2).toString();
@@ -108,10 +116,11 @@ public class KitchenUI extends javax.swing.JPanel {
                 this.isCalculated = true;
             } catch (Exception ex) {
                 tblBelanja.setValueAt(null, i, tabLen-1);
-                continue;
-            }            
+                return false;
+            }          
         }
         lblTotalAll.setText(totalAll.toString());
+        return true;
     }
     
     /**
@@ -208,7 +217,6 @@ public class KitchenUI extends javax.swing.JPanel {
         });
 
         btnSave.setText("Simpan");
-        btnSave.setEnabled(false);
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveActionPerformed(evt);
@@ -337,26 +345,26 @@ public class KitchenUI extends javax.swing.JPanel {
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        TableCellEditor editor = tblBelanja.getCellEditor();
-        if (editor != null) {
-          editor.stopCellEditing();
-        }
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");        
-        String date = formatter.format(dpTanggal.getDate());
-        System.out.println(date);
-
-        TableUtil tblUtil = new TableUtil(tblBelanja);        
-        boolean order = new Kitchen().insertLogistic(tblUtil.getTableData(), date);
-        if (order) {       
-            tblBelanja.setModel(new javax.swing.table.DefaultTableModel(
-                null,
-                new String [] {
-                    "Barang", "Satuan", "Harga", "Jumlah", "Total"
+        if (tblBelanja.getRowCount()>0){
+            if (!this.calculateTotal()) {JOptionPane.showMessageDialog(this, "Pengisian Tidak Benar!"); }
+            else {
+                TableCellEditor editor = tblBelanja.getCellEditor();
+                if (editor != null) {
+                  editor.stopCellEditing();
                 }
-            ));
-            JOptionPane.showMessageDialog(this, "Berhasil!");             
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");        
+                String date = formatter.format(dpTanggal.getDate());
+                System.out.println(date);
+                TableUtil tblUtil = new TableUtil(tblBelanja);        
+                boolean order = new Kitchen().insertLogistic(tblUtil.getTableData(), date, lblTotalAll.getText());
+                if (order) {   
+                    dtm.setRowCount(0);
+                    tblBelanja.setModel(dtm);
+                    JOptionPane.showMessageDialog(this, "Berhasil!");             
+                }
+                else JOptionPane.showMessageDialog(this, "Gagal!");
+            }
         }
-        else JOptionPane.showMessageDialog(this, "Gagal!");
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnCalculateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalculateActionPerformed
@@ -365,7 +373,7 @@ public class KitchenUI extends javax.swing.JPanel {
             if (editor != null) {
               editor.stopCellEditing();
             }
-            this.calculateTotal();
+            if (!this.calculateTotal()) {JOptionPane.showMessageDialog(this, "Pengisian Tidak Benar!"); }
             if (this.isCalculated) {
             btnSave.setEnabled(true);}
 

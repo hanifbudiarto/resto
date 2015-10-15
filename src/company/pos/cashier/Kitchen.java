@@ -7,6 +7,7 @@
 package company.pos.cashier;
 
 import company.pos.database.MysqlConnect;
+import company.pos.util.Session;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -27,12 +28,14 @@ public class Kitchen {
         this.paramTransaction = new ArrayList<>();
     }
     
-    public boolean insertLogistic (Object [][] logistic, String date) {
+    public boolean insertLogistic (Object [][] logistic, String date, String total) {
         MysqlConnect conn = MysqlConnect.getDbCon();        
         if (conn != null) { 
-            String query = "INSERT INTO PEMBELIAN (pembelian_tanggal) VALUES (?)";
+            String query = "INSERT INTO PEMBELIAN (pembelian_tanggal, total, operator) VALUES (?,?,?)";
             parameter.clear();
             parameter.add(date);
+            parameter.add(total);
+            parameter.add(Session.getUserLoggedIn());
             try {
                 boolean result = conn.insert(query, parameter);
                 if (result) {

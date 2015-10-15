@@ -22,14 +22,15 @@ public class Login {
     public String getLogin (String username, String password) {
         String category = "";
         
-        MysqlConnect conn = MysqlConnect.getDbCon();        
-        if (conn != null) {       
+        MysqlConnect db = MysqlConnect.getDbCon();   
+
+        if (db.conn != null) {       
             String query = "SELECT kategori as total FROM pengguna WHERE username = ? and password = ?";
             ArrayList<String> parameter = new ArrayList<>();
             parameter.add(username);
             parameter.add(password);
             try {
-                ResultSet rs = conn.query(query, parameter);
+                ResultSet rs = db.query(query, parameter);
                 rs.next();
                 category = rs.getString(1);                
             } catch (SQLException ex) {
