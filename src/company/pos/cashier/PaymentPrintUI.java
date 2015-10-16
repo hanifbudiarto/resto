@@ -10,8 +10,10 @@ import company.pos.database.MysqlConnect;
 import company.pos.util.FrameUtil;
 import company.pos.util.Session;
 import company.pos.util.TableUtil;
+import java.awt.Color;
 import java.awt.Frame;
 import java.math.BigDecimal;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,6 +21,17 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
+import net.sf.dynamicreports.report.builder.DynamicReports;
+import net.sf.dynamicreports.report.builder.column.Columns;
+import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
+import net.sf.dynamicreports.report.builder.component.Components;
+import net.sf.dynamicreports.report.builder.datatype.DataTypes;
+import net.sf.dynamicreports.report.builder.style.StyleBuilder;
+import net.sf.dynamicreports.report.constant.HorizontalAlignment;
+import net.sf.dynamicreports.report.constant.HorizontalTextAlignment;
+import net.sf.dynamicreports.report.exception.DRException;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -220,13 +233,70 @@ public class PaymentPrintUI extends javax.swing.JPanel {
     }//GEN-LAST:event_btnHomeActionPerformed
 
     private void btnPayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPayActionPerformed
+        showOrderPdf();
         boolean result = payment.pay(tableNumber, total);        
         if (result) {
             JOptionPane.showMessageDialog(this, "Berhasil!");            
+            DefaultTableModel dtm = (DefaultTableModel) tblPayment.getModel();
+            dtm.setRowCount(0);
+            tblPayment.setModel(dtm);
+            btnPay.setEnabled(false);
         }
         else { JOptionPane.showMessageDialog(this, "Gagal!"); }
     }//GEN-LAST:event_btnPayActionPerformed
 
+    private void showOrderPdf () {
+        try {
+            MysqlConnect conn = MysqlConnect.getDbCon();
+            JasperReportBuilder report = DynamicReports.report();
+            try {
+                StyleBuilder boldStyle = DynamicReports.stl.style().bold();
+                StyleBuilder boldCenteredStyle = DynamicReports.stl.style(boldStyle)
+                        .setHorizontalAlignment(HorizontalAlignment.CENTER);
+                StyleBuilder columnTitleStyle = DynamicReports.stl.style(boldCenteredStyle)
+                        .setBorder(DynamicReports.stl.pen1Point())
+                        .setBackgroundColor(Color.LIGHT_GRAY);
+
+                TextColumnBuilder<Integer> rowNumberColumn = DynamicReports.col.reportRowNumberColumn("No. ")
+                        .setFixedColumns(2)
+                        .setHorizontalAlignment(HorizontalAlignment.CENTER);
+                TextColumnBuilder<Long> totalCol = Columns.column("Total", "total", DataTypes.longType());
+                
+                
+                ResultSet result = conn.query("select pd.menu, sum(pd.jumlah) as jumlah, m.harga, sum(pd.jumlah) as humlah, sum(pd.jumlah*m.harga) as total from penjualan_detail pd\n" +
+"left join menu m\n" +
+"on pd.menu = m.nama left join penjualan p on p.penjualan_id = pd.penjualan_id where p.penjualan_tanggal='"+date+"' and p.meja='"+tableNumber+"' and p.ispaid = 0 group by menu", null);
+                
+                report
+                        .setColumnTitleStyle(columnTitleStyle)
+                        .highlightDetailEvenRows()
+                        .setSubtotalStyle(boldCenteredStyle)
+                        .columns(
+                                rowNumberColumn,
+                                Columns.column("Menu yang dipesan", "menu", DataTypes.stringType()).setHorizontalTextAlignment(HorizontalTextAlignment.CENTER),
+                                Columns.column("Jumlah", "jumlah", DataTypes.longType()).setHorizontalTextAlignment(HorizontalTextAlignment.CENTER),
+                                Columns.column("Harga", "harga", DataTypes.longType()).setHorizontalTextAlignment(HorizontalTextAlignment.CENTER),
+                                totalCol.setHorizontalTextAlignment(HorizontalTextAlignment.CENTER)
+                        )
+                        .title (
+                                Components.text("Pesanan Meja "+tableNumber).setStyle(boldCenteredStyle)
+                        )
+                        .pageFooter(Components.pageXofY().setStyle(boldCenteredStyle))
+                        .subtotalsAtSummary(DynamicReports.sbt.sum(totalCol))
+                        .setDataSource(result);
+               
+                JasperViewer viewer = new JasperViewer(report.toJasperPrint(), false);
+                viewer.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                viewer.setTitle("Cetak Pembayaran");
+                viewer.setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(OrderUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (DRException ex) {
+            Logger.getLogger(OrderUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExit;

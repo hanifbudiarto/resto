@@ -10,6 +10,7 @@ import company.pos.admin.MyMenu;
 import company.pos.database.MysqlConnect;
 import company.pos.util.FrameUtil;
 import company.pos.util.TableUtil;
+import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -32,8 +33,12 @@ import javax.swing.table.DefaultTableModel;
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
 import net.sf.dynamicreports.report.builder.DynamicReports;
 import net.sf.dynamicreports.report.builder.column.Columns;
+import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
 import net.sf.dynamicreports.report.builder.component.Components;
 import net.sf.dynamicreports.report.builder.datatype.DataTypes;
+import net.sf.dynamicreports.report.builder.style.StyleBuilder;
+import net.sf.dynamicreports.report.constant.HorizontalAlignment;
+import net.sf.dynamicreports.report.constant.HorizontalTextAlignment;
 import net.sf.dynamicreports.report.exception.DRException;
 import net.sf.jasperreports.view.JasperViewer;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
@@ -332,7 +337,7 @@ public class OrderUI extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGap(0, 687, Short.MAX_VALUE)
                         .addComponent(btnMinimize, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -396,12 +401,14 @@ public class OrderUI extends javax.swing.JPanel {
         
             TableUtil tblUtil = new TableUtil(tblOrder);        
             int order = new Order().insertOrder(tblUtil.getTableData(), date, tfMeja.getText(), taCatatan.getText());
-            if (order >= 0) {            
-                JOptionPane.showMessageDialog(this, "Berhasil!");
-                this.initOrderTable();
+            if (order >= 0) {                          
                 this.showOrderPdf(order, tfMeja.getText(), taCatatan.getText());
                 tfMeja.setText("");
                 taCatatan.setText("");
+                modelOrderTable = (DefaultTableModel)tblOrder.getModel();
+                modelOrderTable.setRowCount(0);
+                tblOrder.setModel(modelOrderTable);
+                JOptionPane.showMessageDialog(this, "Berhasil!");
             }
             else JOptionPane.showMessageDialog(this, "Gagal!");
         }
@@ -412,17 +419,42 @@ public class OrderUI extends javax.swing.JPanel {
             MysqlConnect conn = MysqlConnect.getDbCon();
             JasperReportBuilder report = DynamicReports.report();
             try {
+                StyleBuilder boldStyle = DynamicReports.stl.style().bold();
+                StyleBuilder boldCenteredStyle = DynamicReports.stl.style(boldStyle)
+                        .setHorizontalAlignment(HorizontalAlignment.CENTER);
+                StyleBuilder columnTitleStyle = DynamicReports.stl.style(boldCenteredStyle)
+                        .setBorder(DynamicReports.stl.pen1Point())
+                        .setBackgroundColor(Color.LIGHT_GRAY);
+                
+//                TextColumnBuilder<Integer> rowNumberColumn = DynamicReports.col.reportRowNumberColumn("No. ")
+//                        .setFixedColumns(2)
+//                        .setHorizontalAlignment(HorizontalAlignment.CENTER);
+                
+                TextColumnBuilder<String> categoryCol = Columns.column("Kategori",       "nama",      DataTypes.stringType()).setStyle(boldStyle);
+                ResultSet result = conn.query("select mk.nama, pd.menu, sum(pd.jumlah) as jumlah from penjualan_detail pd left join menu m on m.nama =\n" +
+"pd.menu left join menu_kategori mk on m.kategori_id = mk.kategori_id " +
+" where pd.penjualan_id ="+orderid+" group by pd.menu order by mk.nama \n", null);
+                
                 report
+                        .setColumnTitleStyle(columnTitleStyle)
+                        .highlightDetailEvenRows()
                         .columns(
-                                Columns.column("Menu yang dipesan", "menu", DataTypes.stringType()),
-                                Columns.column("Jumlah", "jumlah", DataTypes.stringType())                                
+//                                rowNumberColumn,
+                                categoryCol,
+                                Columns.column("Menu yang dipesan", "menu", DataTypes.stringType()).setHorizontalTextAlignment(HorizontalTextAlignment.CENTER),
+                                Columns.column("Jumlah", "jumlah", DataTypes.longType()).setHorizontalTextAlignment(HorizontalTextAlignment.CENTER)
                         )
+                        .groupBy(categoryCol)
                         .title (
-                                Components.text("Pesanan Meja "+tableNum)
+                                Components.text("Pesanan Meja "+tableNum).setStyle(boldCenteredStyle)
                         )
-                        .pageFooter(Components.pageXofY())
-                        .setDataSource(conn.query("select menu, jumlah from penjualan_detail where penjualan_id = "+orderid, null));
+                        .pageFooter(Components.pageXofY().setStyle(boldCenteredStyle))
+                        .summary(Components.text("Catatan : \n"+note))
+                        .setDataSource(result);
+               
                 JasperViewer viewer = new JasperViewer(report.toJasperPrint(), false);
+                viewer.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                viewer.setTitle("Cetak Pesanan");
                 viewer.setVisible(true);
             } catch (SQLException ex) {
                 Logger.getLogger(OrderUI.class.getName()).log(Level.SEVERE, null, ex);

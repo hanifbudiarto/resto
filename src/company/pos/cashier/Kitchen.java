@@ -28,7 +28,7 @@ public class Kitchen {
         this.paramTransaction = new ArrayList<>();
     }
     
-    public boolean insertLogistic (Object [][] logistic, String date, String total) {
+    public int insertLogistic (Object [][] logistic, String date, String total) {
         MysqlConnect conn = MysqlConnect.getDbCon();        
         if (conn != null) { 
             String query = "INSERT INTO PEMBELIAN (pembelian_tanggal, total, operator) VALUES (?,?,?)";
@@ -63,15 +63,16 @@ public class Kitchen {
                     boolean finalResult = conn.insertTransaction(parameter, paramTransaction);
                     if (!finalResult) {                        
                         query = "DELETE from PEMBELIAN WHERE pembelian_id = "+lastInsertedId;
-                        return conn.updateOrDelete(query);
+                        conn.updateOrDelete(query);
+                        return -1;
                     }
-                    return finalResult;
+                    return Integer.parseInt(lastInsertedId);
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(Order.class.getName()).log(Level.SEVERE, null, ex);
-                return false;
+                return -1;
             }
         }
-        return false;
+        return -1;
     }    
 }

@@ -6,8 +6,10 @@
 
 package company.pos.cashier;
 
+import company.pos.database.MysqlConnect;
 import company.pos.util.FrameUtil;
 import company.pos.util.TableUtil;
+import java.awt.Color;
 import java.awt.Frame;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -15,6 +17,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.math.BigInteger;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,6 +31,17 @@ import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
+import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
+import net.sf.dynamicreports.report.builder.DynamicReports;
+import net.sf.dynamicreports.report.builder.column.Columns;
+import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
+import net.sf.dynamicreports.report.builder.component.Components;
+import net.sf.dynamicreports.report.builder.datatype.DataTypes;
+import net.sf.dynamicreports.report.builder.style.StyleBuilder;
+import net.sf.dynamicreports.report.constant.HorizontalAlignment;
+import net.sf.dynamicreports.report.constant.HorizontalTextAlignment;
+import net.sf.dynamicreports.report.exception.DRException;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -356,8 +371,9 @@ public class KitchenUI extends javax.swing.JPanel {
                 String date = formatter.format(dpTanggal.getDate());
                 System.out.println(date);
                 TableUtil tblUtil = new TableUtil(tblBelanja);        
-                boolean order = new Kitchen().insertLogistic(tblUtil.getTableData(), date, lblTotalAll.getText());
-                if (order) {   
+                int orderid = new Kitchen().insertLogistic(tblUtil.getTableData(), date, lblTotalAll.getText());
+                if (orderid>=0) {   
+                    this.showOrderPdf(orderid);
                     dtm.setRowCount(0);
                     tblBelanja.setModel(dtm);
                     JOptionPane.showMessageDialog(this, "Berhasil!");             
@@ -367,6 +383,66 @@ public class KitchenUI extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnSaveActionPerformed
 
+    private void showOrderPdf (int orderid) {
+        try {
+            MysqlConnect conn = MysqlConnect.getDbCon();
+            JasperReportBuilder report = DynamicReports.report();
+            try {
+                StyleBuilder boldStyle = DynamicReports.stl.style().bold();
+                StyleBuilder boldCenteredStyle = DynamicReports.stl.style(boldStyle)
+                        .setHorizontalAlignment(HorizontalAlignment.CENTER);
+                StyleBuilder columnTitleStyle = DynamicReports.stl.style(boldCenteredStyle)
+                        .setBorder(DynamicReports.stl.pen1Point())
+                        .setBackgroundColor(Color.LIGHT_GRAY);
+                
+                TextColumnBuilder<Integer> rowNumberColumn = DynamicReports.col.reportRowNumberColumn("No. ")
+                        .setFixedColumns(2)
+                        .setHorizontalAlignment(HorizontalAlignment.CENTER);
+                
+                SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                String date = formatter.format(dpTanggal.getDate());
+                
+                ResultSet result = conn.query("select pd.nama_barang, pd.satuan, pd.harga, pd.jumlah, pd.harga*pd.jumlah as total, date_format(p.timestamp,\"%d %M %y %H:%i:%s\") as waktu from pembelian_detail pd\n" +
+"left join pembelian p on pd.pembelian_id = p.pembelian_id where p.pembelian_id = "+orderid, null);
+                
+                TextColumnBuilder<Long> totalCol = Columns.column("Total", "total", DataTypes.longType()).setHorizontalTextAlignment(HorizontalTextAlignment.CENTER);
+                
+                result.next();
+                String datetime = result.getString("waktu");
+                result.previous();
+                
+                report
+                        .setColumnTitleStyle(columnTitleStyle)
+                        .highlightDetailEvenRows()
+                        .setSubtotalStyle(boldCenteredStyle)
+                        .columns(
+                                rowNumberColumn,
+                                Columns.column("Nama Barang", "nama_barang", DataTypes.stringType()).setHorizontalTextAlignment(HorizontalTextAlignment.CENTER),
+                                Columns.column("Satuan", "satuan", DataTypes.stringType()).setHorizontalTextAlignment(HorizontalTextAlignment.CENTER),
+                                Columns.column("Jumlah", "jumlah", DataTypes.integerType()).setHorizontalTextAlignment(HorizontalTextAlignment.CENTER),
+                                Columns.column("Harga/Satuan", "harga", DataTypes.longType()).setHorizontalTextAlignment(HorizontalTextAlignment.CENTER),
+                                totalCol
+                        )
+                        .title (
+                                Components.text("Belanja Tanggal "+date).setStyle(boldCenteredStyle)
+                        )
+                        .summary(Components.text("Timestamp: "+datetime))
+                        .pageFooter(Components.pageXofY().setStyle(boldCenteredStyle))
+                        .subtotalsAtSummary(DynamicReports.sbt.sum(totalCol))
+                        .setDataSource(result);
+               
+                JasperViewer viewer = new JasperViewer(report.toJasperPrint(), false);
+                viewer.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                viewer.setTitle("Cetak Laporan Belanja");
+                viewer.setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(OrderUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (DRException ex) {
+            Logger.getLogger(OrderUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     private void btnCalculateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalculateActionPerformed
         
             TableCellEditor editor = tblBelanja.getCellEditor();
