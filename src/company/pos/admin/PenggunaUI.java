@@ -63,6 +63,7 @@ public class PenggunaUI extends JPanel {
         saveButton = new javax.swing.JButton();
         btnHome = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
+        jLabel4 = new javax.swing.JLabel();
 
         FormListener formListener = new FormListener();
 
@@ -146,6 +147,9 @@ public class PenggunaUI extends JPanel {
         btnHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/company/pos/images/home.png"))); // NOI18N
         btnHome.addActionListener(formListener);
 
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel4.setText("MENU UTAMA");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -178,7 +182,8 @@ public class PenggunaUI extends JPanel {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(btnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jSeparator1))
+                    .addComponent(jSeparator1)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -189,7 +194,9 @@ public class PenggunaUI extends JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnHome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(7, 7, 7)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(masterScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -210,11 +217,12 @@ public class PenggunaUI extends JPanel {
                     .addComponent(kategoriLabel)
                     .addComponent(kategoriField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(21, 21, 21)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(refreshButton, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(newButton, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(saveButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(refreshButton, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(newButton, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -264,19 +272,7 @@ public class PenggunaUI extends JPanel {
     private class FormListener implements java.awt.event.ActionListener {
         FormListener() {}
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            if (evt.getSource() == saveButton) {
-                PenggunaUI.this.saveButtonActionPerformed(evt);
-            }
-            else if (evt.getSource() == refreshButton) {
-                PenggunaUI.this.refreshButtonActionPerformed(evt);
-            }
-            else if (evt.getSource() == newButton) {
-                PenggunaUI.this.newButtonActionPerformed(evt);
-            }
-            else if (evt.getSource() == deleteButton) {
-                PenggunaUI.this.deleteButtonActionPerformed(evt);
-            }
-            else if (evt.getSource() == btnMinimize) {
+            if (evt.getSource() == btnMinimize) {
                 PenggunaUI.this.btnMinimizeActionPerformed(evt);
             }
             else if (evt.getSource() == btnExit) {
@@ -284,6 +280,18 @@ public class PenggunaUI extends JPanel {
             }
             else if (evt.getSource() == kategoriField) {
                 PenggunaUI.this.kategoriFieldActionPerformed(evt);
+            }
+            else if (evt.getSource() == newButton) {
+                PenggunaUI.this.newButtonActionPerformed(evt);
+            }
+            else if (evt.getSource() == deleteButton) {
+                PenggunaUI.this.deleteButtonActionPerformed(evt);
+            }
+            else if (evt.getSource() == refreshButton) {
+                PenggunaUI.this.refreshButtonActionPerformed(evt);
+            }
+            else if (evt.getSource() == saveButton) {
+                PenggunaUI.this.saveButtonActionPerformed(evt);
             }
             else if (evt.getSource() == btnHome) {
                 PenggunaUI.this.btnHomeActionPerformed(evt);
@@ -364,6 +372,7 @@ public class PenggunaUI extends JPanel {
     private javax.swing.JButton btnMinimize;
     private javax.swing.JButton deleteButton;
     private javax.persistence.EntityManager entityManager;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;

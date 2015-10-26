@@ -58,6 +58,7 @@ public class MenuKategoriUI extends JPanel {
         saveButton = new javax.swing.JButton();
         btnHome = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
+        jLabel1 = new javax.swing.JLabel();
 
         FormListener formListener = new FormListener();
 
@@ -106,6 +107,9 @@ public class MenuKategoriUI extends JPanel {
         btnHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/company/pos/images/home.png"))); // NOI18N
         btnHome.addActionListener(formListener);
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel1.setText("MENU UTAMA");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -122,14 +126,15 @@ public class MenuKategoriUI extends JPanel {
                         .addComponent(refreshButton)
                         .addGap(18, 18, 18)
                         .addComponent(saveButton))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(btnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jSeparator1)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(namaLabel)
                         .addGap(8, 8, 8)
-                        .addComponent(namaField)))
+                        .addComponent(namaField))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(btnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -140,7 +145,9 @@ public class MenuKategoriUI extends JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnHome)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(7, 7, 7)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(masterScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -204,11 +211,11 @@ public class MenuKategoriUI extends JPanel {
     private class FormListener implements java.awt.event.ActionListener {
         FormListener() {}
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            if (evt.getSource() == saveButton) {
-                MenuKategoriUI.this.saveButtonActionPerformed(evt);
+            if (evt.getSource() == btnMinimize) {
+                MenuKategoriUI.this.btnMinimizeActionPerformed(evt);
             }
-            else if (evt.getSource() == refreshButton) {
-                MenuKategoriUI.this.refreshButtonActionPerformed(evt);
+            else if (evt.getSource() == btnExit) {
+                MenuKategoriUI.this.btnExitActionPerformed(evt);
             }
             else if (evt.getSource() == newButton) {
                 MenuKategoriUI.this.newButtonActionPerformed(evt);
@@ -216,11 +223,11 @@ public class MenuKategoriUI extends JPanel {
             else if (evt.getSource() == deleteButton) {
                 MenuKategoriUI.this.deleteButtonActionPerformed(evt);
             }
-            else if (evt.getSource() == btnMinimize) {
-                MenuKategoriUI.this.btnMinimizeActionPerformed(evt);
+            else if (evt.getSource() == refreshButton) {
+                MenuKategoriUI.this.refreshButtonActionPerformed(evt);
             }
-            else if (evt.getSource() == btnExit) {
-                MenuKategoriUI.this.btnExitActionPerformed(evt);
+            else if (evt.getSource() == saveButton) {
+                MenuKategoriUI.this.saveButtonActionPerformed(evt);
             }
             else if (evt.getSource() == btnHome) {
                 MenuKategoriUI.this.btnHomeActionPerformed(evt);
@@ -297,6 +304,7 @@ public class MenuKategoriUI extends JPanel {
     private javax.swing.JButton btnMinimize;
     private javax.swing.JButton deleteButton;
     private javax.persistence.EntityManager entityManager;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;

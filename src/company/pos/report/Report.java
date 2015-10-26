@@ -8,20 +8,13 @@ package company.pos.report;
 
 import company.pos.database.MysqlConnect;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
-import net.sf.dynamicreports.jasper.builder.export.JasperExcelApiXlsExporterBuilder;
-import net.sf.dynamicreports.jasper.builder.export.JasperXlsExporterBuilder;
 import net.sf.dynamicreports.report.builder.DynamicReports;
-import static net.sf.dynamicreports.report.builder.DynamicReports.export;
 import net.sf.dynamicreports.report.builder.column.Columns;
 import net.sf.dynamicreports.report.builder.component.Components;
 import net.sf.dynamicreports.report.builder.component.MultiPageListBuilder;
 import net.sf.dynamicreports.report.builder.datatype.DataTypes;
-import net.sf.dynamicreports.report.constant.SplitType;
 import net.sf.dynamicreports.report.exception.DRException;
 import net.sf.jasperreports.view.JasperViewer;
 
