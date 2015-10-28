@@ -16,12 +16,12 @@ import java.util.logging.Logger;
  *
  * @author M Hanif Budiarto
  */
-public class MyMenu {
+public class Menu {
     
     private final ArrayList<String> parameter;       
     private final ArrayList<ArrayList<String>> paramTransaction;
     
-    public MyMenu () {
+    public Menu () {
         this.parameter = new ArrayList<>();
         this.paramTransaction = new ArrayList<>();
     }
@@ -87,7 +87,7 @@ public class MyMenu {
                 ResultSet rset = conn.query(query, null);
                 return rset;
             } catch (SQLException ex) {
-                Logger.getLogger(MyMenu.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return null;

@@ -44,14 +44,14 @@ public class AdminPageUI extends javax.swing.JPanel {
         btnMenu = new javax.swing.JButton();
         btnCategory = new javax.swing.JButton();
         lblUser = new javax.swing.JLabel();
-        btnReport = new javax.swing.JButton();
+        btnReportBelanja = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jXHyperlink1 = new org.jdesktop.swingx.JXHyperlink();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        btnReport1 = new javax.swing.JButton();
+        btnReportJual = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
 
@@ -97,10 +97,10 @@ public class AdminPageUI extends javax.swing.JPanel {
         lblUser.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblUser.setText("jLabel5");
 
-        btnReport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/company/pos/images/report.png"))); // NOI18N
-        btnReport.addActionListener(new java.awt.event.ActionListener() {
+        btnReportBelanja.setIcon(new javax.swing.ImageIcon(getClass().getResource("/company/pos/images/report.png"))); // NOI18N
+        btnReportBelanja.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnReportActionPerformed(evt);
+                btnReportBelanjaActionPerformed(evt);
             }
         });
 
@@ -126,10 +126,10 @@ public class AdminPageUI extends javax.swing.JPanel {
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setText("LAPORAN");
 
-        btnReport1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/company/pos/images/laporan2.png"))); // NOI18N
-        btnReport1.addActionListener(new java.awt.event.ActionListener() {
+        btnReportJual.setIcon(new javax.swing.ImageIcon(getClass().getResource("/company/pos/images/laporan2.png"))); // NOI18N
+        btnReportJual.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnReport1ActionPerformed(evt);
+                btnReportJualActionPerformed(evt);
             }
         });
 
@@ -155,27 +155,25 @@ public class AdminPageUI extends javax.swing.JPanel {
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(jPanel1Layout.createSequentialGroup()
                                                 .addGap(12, 12, 12)
-                                                .addComponent(jLabel8)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                .addComponent(jLabel8))
                                             .addGroup(jPanel1Layout.createSequentialGroup()
                                                 .addComponent(jLabel1)
                                                 .addGap(55, 55, 55)
-                                                .addComponent(jLabel2)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                                .addComponent(jLabel2))))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(jPanel1Layout.createSequentialGroup()
                                                 .addComponent(btnUser, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(18, 18, Short.MAX_VALUE))
                                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                                .addComponent(btnReportBelanja, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                                                 .addGap(18, 18, 18)))
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(jPanel1Layout.createSequentialGroup()
                                                 .addGap(10, 10, 10)
                                                 .addComponent(jLabel7))
                                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                .addComponent(btnReport1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                                .addComponent(btnReportJual, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                                                 .addComponent(btnMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -221,8 +219,8 @@ public class AdminPageUI extends javax.swing.JPanel {
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnReport1)
-                    .addComponent(btnReport))
+                    .addComponent(btnReportJual)
+                    .addComponent(btnReportBelanja))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel7)
@@ -284,24 +282,24 @@ public class AdminPageUI extends javax.swing.JPanel {
     }//GEN-LAST:event_btnUserActionPerformed
 
     private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
-        FrameUtil.changeUI(new MyMenuUI(), (JFrame) SwingUtilities.getWindowAncestor(this));
+        FrameUtil.changeUI(new MenuUI(), (JFrame) SwingUtilities.getWindowAncestor(this));
     }//GEN-LAST:event_btnMenuActionPerformed
 
     private void btnCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCategoryActionPerformed
         FrameUtil.changeUI(new MenuKategoriUI(), (JFrame) SwingUtilities.getWindowAncestor(this));
     }//GEN-LAST:event_btnCategoryActionPerformed
 
-    private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
-        
-    }//GEN-LAST:event_btnReportActionPerformed
+    private void btnReportBelanjaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportBelanjaActionPerformed
+        FrameUtil.changeUI(new LaporanBelanjaUI(), (JFrame) SwingUtilities.getWindowAncestor(this));
+    }//GEN-LAST:event_btnReportBelanjaActionPerformed
 
     private void jXHyperlink1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXHyperlink1ActionPerformed
         FrameUtil.changeUI(new LoginUI(), (JFrame) SwingUtilities.getWindowAncestor(this));
     }//GEN-LAST:event_jXHyperlink1ActionPerformed
 
-    private void btnReport1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReport1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnReport1ActionPerformed
+    private void btnReportJualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportJualActionPerformed
+        FrameUtil.changeUI(new LaporanPenjualanUI(), (JFrame) SwingUtilities.getWindowAncestor(this));
+    }//GEN-LAST:event_btnReportJualActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -309,8 +307,8 @@ public class AdminPageUI extends javax.swing.JPanel {
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnMenu;
     private javax.swing.JButton btnMinimize;
-    private javax.swing.JButton btnReport;
-    private javax.swing.JButton btnReport1;
+    private javax.swing.JButton btnReportBelanja;
+    private javax.swing.JButton btnReportJual;
     private javax.swing.JButton btnUser;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

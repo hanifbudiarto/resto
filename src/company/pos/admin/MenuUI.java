@@ -31,14 +31,14 @@ import javax.swing.table.TableCellEditor;
  *
  * @author Muhammad Hanif B
  */
-public class MyMenuUI extends javax.swing.JPanel {
+public class MenuUI extends javax.swing.JPanel {
 
     /**
-     * Creates new form MyMenuUI
+     * Creates new form MenuUI
      */
     DefaultTableModel dtm = new DefaultTableModel();
     
-    public MyMenuUI() {
+    public MenuUI() {
         initComponents();    
         dtm = (DefaultTableModel) jTable1.getModel();
                 
@@ -122,11 +122,11 @@ public class MyMenuUI extends javax.swing.JPanel {
 
     private void populateTableMenu () {
         try {
-            dtm = TableUtil.buildTableModel(new MyMenu().getAllMenu(), false);
+            dtm = TableUtil.buildTableModel(new Menu().getAllMenu(), false);
             dtm.fireTableDataChanged();
             jTable1.setModel(dtm);
         } catch (SQLException ex) {
-            Logger.getLogger(MyMenuUI.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MenuUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -356,12 +356,12 @@ public class MyMenuUI extends javax.swing.JPanel {
 //        String catName = cbCategory.getSelectedItem().toString();
 //        
 //        if (!menuName.isEmpty() && !price.isEmpty() && !catName.isEmpty()){
-//            MyMenu menu = new MyMenu();
+//            Menu menu = new Menu();
 //            menu.insertMenu(menuName, price, catName);
 //            this.populateTableMenu();
 //        }
         TableUtil tblUtil = new TableUtil(jTable1);        
-        boolean order = new MyMenu().insert(tblUtil.getTableData());
+        boolean order = new Menu().insert(tblUtil.getTableData());
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnMinimizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMinimizeActionPerformed

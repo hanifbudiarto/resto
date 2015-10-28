@@ -6,7 +6,7 @@
 
 package company.pos.cashier;
 
-import company.pos.admin.MyMenu;
+import company.pos.admin.Menu;
 import company.pos.database.MysqlConnect;
 import company.pos.util.FrameUtil;
 import company.pos.util.TableUtil;
@@ -117,7 +117,7 @@ public class OrderUI extends javax.swing.JPanel {
     }
     
     private void initCBMenu () { 
-        // Set autocomplete on combobox MyMenu
+        // Set autocomplete on combobox Menu
         AutoCompleteDecorator.decorate(cbMenu);
         try {
             this.populateMenu();
@@ -127,7 +127,7 @@ public class OrderUI extends javax.swing.JPanel {
     }
     
     private void populateMenu () throws SQLException {
-        ResultSet rset = new MyMenu().getAllMenu();
+        ResultSet rset = new Menu().getAllMenu();
         DefaultComboBoxModel<String> model  = new DefaultComboBoxModel<>();
         while (rset.next()) {
             model.addElement(rset.getString(1));
@@ -455,7 +455,7 @@ public class OrderUI extends javax.swing.JPanel {
                         )
                         .groupBy(categoryCol)
                         .title (
-                                Components.text("Pesanan Meja "+tableNum).setStyle(boldCenteredStyle)
+                                Components.text("Pesanan Meja "+tableNum+"\n").setStyle(boldCenteredStyle)
                         )
                         .pageFooter(Components.pageXofY().setStyle(boldCenteredStyle))
                         .summary(Components.text("Catatan : \n"+note))

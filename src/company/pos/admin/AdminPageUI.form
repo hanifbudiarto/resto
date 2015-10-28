@@ -117,13 +117,11 @@
                                                   <Group type="102" attributes="0">
                                                       <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                                                       <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
-                                                      <EmptySpace max="32767" attributes="0"/>
                                                   </Group>
                                                   <Group type="102" attributes="0">
                                                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                                                       <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
                                                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                                                      <EmptySpace max="32767" attributes="0"/>
                                                   </Group>
                                               </Group>
                                           </Group>
@@ -134,7 +132,7 @@
                                                       <EmptySpace type="separate" max="32767" attributes="0"/>
                                                   </Group>
                                                   <Group type="102" attributes="0">
-                                                      <Component id="btnReport" pref="0" max="32767" attributes="0"/>
+                                                      <Component id="btnReportBelanja" pref="0" max="32767" attributes="0"/>
                                                       <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
@@ -144,7 +142,7 @@
                                                       <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
                                                   </Group>
                                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                      <Component id="btnReport1" alignment="0" pref="0" max="32767" attributes="0"/>
+                                                      <Component id="btnReportJual" alignment="0" pref="0" max="32767" attributes="0"/>
                                                       <Component id="btnMenu" min="-2" pref="137" max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
@@ -210,8 +208,8 @@
                       <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="btnReport1" min="-2" max="-2" attributes="0"/>
-                          <Component id="btnReport" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnReportJual" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnReportBelanja" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -262,14 +260,14 @@
                 <Property name="text" type="java.lang.String" value="jLabel5"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="btnReport">
+            <Component class="javax.swing.JButton" name="btnReportBelanja">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/company/pos/images/report.png"/>
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnReportActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnReportBelanjaActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel1">
@@ -320,14 +318,14 @@
                 <Property name="text" type="java.lang.String" value="LAPORAN"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="btnReport1">
+            <Component class="javax.swing.JButton" name="btnReportJual">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/company/pos/images/laporan2.png"/>
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnReport1ActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnReportJualActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel7">

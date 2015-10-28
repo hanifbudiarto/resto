@@ -452,7 +452,7 @@ public class KitchenUI extends javax.swing.JPanel {
                                 totalCol
                         )
                         .title (
-                                Components.text("Belanja Tanggal "+date).setStyle(boldCenteredStyle)
+                                Components.text("Belanja Tanggal "+date+"\n").setStyle(boldCenteredStyle)
                         )
                         .summary(Components.text("Timestamp: "+datetime))
                         .pageFooter(Components.pageXofY().setStyle(boldCenteredStyle))
