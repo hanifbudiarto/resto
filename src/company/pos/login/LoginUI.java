@@ -68,7 +68,7 @@ public class LoginUI extends javax.swing.JPanel {
             }
         });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("<Nama Program>"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Sistem Manajemen Restoran v1.0"));
 
         tfPassword.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 

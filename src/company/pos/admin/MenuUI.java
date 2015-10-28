@@ -6,7 +6,6 @@
 
 package company.pos.admin;
 
-import company.pos.cashier.Kitchen;
 import company.pos.util.FrameUtil;
 import company.pos.util.TableUtil;
 import java.awt.Frame;
@@ -20,7 +19,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -362,6 +360,10 @@ public class MenuUI extends javax.swing.JPanel {
 //        }
         TableUtil tblUtil = new TableUtil(jTable1);        
         boolean order = new Menu().insert(tblUtil.getTableData());
+        
+        tfMenuName.setEnabled(false);
+        tfPrice.setEnabled(false);
+        this.populateTableMenu();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnMinimizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMinimizeActionPerformed
