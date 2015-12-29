@@ -1,6 +1,9 @@
 
 import company.pos.login.LoginUI;
 import company.pos.util.FrameUtil;
+import java.awt.Image;
+import java.awt.Toolkit;
+import javax.swing.ImageIcon;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -19,6 +22,9 @@ public class Main extends javax.swing.JFrame {
      */
     public Main() {
         initComponents();
+        Image image = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/resources/icon.png"));
+        setIconImage(image);
+        setTitle("Siresto v1.0");
         setLocationRelativeTo(null);
         FrameUtil.changeUI(new LoginUI(), this);
     }

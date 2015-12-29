@@ -15,9 +15,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
+import java.math.BigInteger;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -64,7 +62,7 @@ public class PaymentUI extends javax.swing.JPanel {
                     int dialogResult = JOptionPane.showConfirmDialog (null, "Lihat Pesanan Meja "+selectedObject.toString()+" ?","Peringatan",dialogButton);
                     if(dialogResult == 0){                       
                         int saleId = Integer.parseInt(table.getModel().getValueAt(row, 0).toString());
-                        BigDecimal totalSale = new BigDecimal(table.getModel().getValueAt(row, 3).toString());
+                        BigInteger totalSale = new BigInteger(table.getModel().getValueAt(row, 3).toString());
                         
                         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                         String date = formatter.format(dpTanggal.getDate());

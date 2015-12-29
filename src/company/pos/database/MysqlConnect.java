@@ -27,7 +27,7 @@ public class MysqlConnect {
         String dbName   = "resto";
         String driver   = "com.mysql.jdbc.Driver";
         String userName = "root";
-        String password = "";
+        String password = "root";
         try {
             Class.forName(driver).newInstance();
             this.conn = (Connection)DriverManager.getConnection(url+dbName,userName,password);

@@ -6,13 +6,14 @@
 
 package company.pos.cashier;
 
+import company.pos.admin.Charges;
 import company.pos.database.MysqlConnect;
 import company.pos.util.FrameUtil;
-import company.pos.util.Session;
 import company.pos.util.TableUtil;
 import java.awt.Color;
 import java.awt.Frame;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -30,6 +31,8 @@ import net.sf.dynamicreports.report.builder.datatype.DataTypes;
 import net.sf.dynamicreports.report.builder.style.StyleBuilder;
 import net.sf.dynamicreports.report.constant.HorizontalAlignment;
 import net.sf.dynamicreports.report.constant.HorizontalTextAlignment;
+import net.sf.dynamicreports.report.constant.PageOrientation;
+import net.sf.dynamicreports.report.constant.VerticalAlignment;
 import net.sf.dynamicreports.report.exception.DRException;
 import net.sf.jasperreports.view.JasperViewer;
 
@@ -45,24 +48,32 @@ public class PaymentPrintUI extends javax.swing.JPanel {
      * @param total
      */
     private final int id;
-    private final BigDecimal total;
+    private final BigInteger total;
     private final String date;
     private final String tableNumber;
     
     private final Payment payment;
     
-    public PaymentPrintUI(int id, BigDecimal total, String date, String tableNumber) {
+    private BigInteger paid;
+    
+    BigInteger service = null;
+    BigInteger tax = null;
+    
+    public PaymentPrintUI(int id, BigInteger total, String date, String tableNumber) {
         initComponents();
         this.id = id;
         this.total = total;
         this.date = date;
         this.tableNumber = tableNumber;
         this.payment = new Payment();
+        this.addAdditionalCharges ();
         this.initOrderTable();        
     }
 
-     private void initOrderTable () {
-        lblTotal.setText(total.toString());
+    private void initOrderTable () {
+        tfTotal.setEditable(false);
+        tfTax.setEditable(false);
+        tfService.setEditable(false);
         try {
             DefaultTableModel dtm = TableUtil.buildTableModel(payment.getPaymentDetail(this.date, this.tableNumber), false);
             tblPayment.setModel(dtm);
@@ -71,6 +82,31 @@ public class PaymentPrintUI extends javax.swing.JPanel {
         }          
     }
     
+    private void addAdditionalCharges (){
+        try {
+            ResultSet rset = new Charges().getAllCharges();
+            while (rset.next()) {
+                if (rset.getString(2).toUpperCase().equals("PAJAK")) {
+                    BigDecimal temptax = new BigDecimal(rset.getString(3));
+                    BigDecimal temptotal = new BigDecimal(total);
+                    System.out.println (temptax + " --- "+temptotal);
+                    
+                    temptax = temptax.multiply(temptotal);
+                    tax = temptax.toBigInteger();
+                    System.out.println(tax);
+                    tfTax.setText(tax.toString());                    
+                }
+                
+                if (rset.getString(2).toUpperCase().equals("SERVIS")) {
+                    service = new BigInteger(rset.getString(3));
+                    tfService.setText(service.toString());
+                }                
+            }            
+            tfTotal.setText(total.add(tax).add(service).toString());
+        } catch (SQLException ex) {
+            Logger.getLogger(PaymentPrintUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -91,8 +127,18 @@ public class PaymentPrintUI extends javax.swing.JPanel {
         btnHome = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel1 = new javax.swing.JLabel();
-        lblTotal = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
+        tfPaid = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        tfTotal = new javax.swing.JTextField();
+        tfTax = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        tfService = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -136,13 +182,43 @@ public class PaymentPrintUI extends javax.swing.JPanel {
         });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel1.setText("TOTAL : Rp. ");
-
-        lblTotal.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        lblTotal.setText("0");
+        jLabel1.setText("TOTAL :");
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel8.setText("KEMBALI");
+
+        tfPaid.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        tfPaid.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel2.setText("UANG YANG DIBAYARKAN :");
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel3.setText("Rp. ");
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel4.setText("Rp. ");
+
+        tfTotal.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        tfTotal.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+
+        tfTax.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        tfTax.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel5.setText("PAJAK (10%) :");
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel6.setText("Rp. ");
+
+        tfService.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        tfService.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel7.setText("Rp. ");
+
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel9.setText("SERVIS :");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -153,21 +229,36 @@ public class PaymentPrintUI extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 579, Short.MAX_VALUE)
                     .addComponent(jSeparator1)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnPay, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblTotal))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
                                 .addComponent(jLabel8)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(btnPay, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel5))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel6)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel7)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(tfService)
+                            .addComponent(tfTax)
+                            .addComponent(tfPaid)
+                            .addComponent(tfTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -181,14 +272,29 @@ public class PaymentPrintUI extends javax.swing.JPanel {
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(13, 13, 13)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addComponent(btnPay))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(lblTotal)
-                        .addComponent(jLabel1)))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tfTax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tfService, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel9))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel3)
+                    .addComponent(tfTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tfPaid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnPay)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -243,8 +349,10 @@ public class PaymentPrintUI extends javax.swing.JPanel {
     }//GEN-LAST:event_btnHomeActionPerformed
 
     private void btnPayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPayActionPerformed
+        paid = new BigInteger (tfPaid.getText());
+        BigInteger totalwCharges = new BigInteger(tfTotal.getText());
         showOrderPdf();
-        boolean result = payment.pay(tableNumber, total);        
+        boolean result = payment.pay(tableNumber, totalwCharges, paid);        
         if (result) {
             JOptionPane.showMessageDialog(this, "Berhasil!");            
             DefaultTableModel dtm = (DefaultTableModel) tblPayment.getModel();
@@ -257,8 +365,10 @@ public class PaymentPrintUI extends javax.swing.JPanel {
 
     private void showOrderPdf () {
         try {
+            BigInteger totalwCharges = new BigInteger(tfTotal.getText());
             MysqlConnect conn = MysqlConnect.getDbCon();
             JasperReportBuilder report = DynamicReports.report();
+            report.setPageFormat(300, 700, PageOrientation.PORTRAIT);
             try {
                 StyleBuilder boldStyle = DynamicReports.stl.style().bold();
                 StyleBuilder boldCenteredStyle = DynamicReports.stl.style(boldStyle)
@@ -266,18 +376,21 @@ public class PaymentPrintUI extends javax.swing.JPanel {
                 StyleBuilder columnTitleStyle = DynamicReports.stl.style(boldCenteredStyle)
                         .setBorder(DynamicReports.stl.pen1Point())
                         .setBackgroundColor(Color.LIGHT_GRAY);
+                
+                StyleBuilder titleStyle = DynamicReports.stl.style(boldCenteredStyle)
+	                             .setVerticalAlignment(VerticalAlignment.MIDDLE)
+	                             .setFontSize(12);
 
                 TextColumnBuilder<Integer> rowNumberColumn = DynamicReports.col.reportRowNumberColumn("No. ")
                         .setFixedColumns(2)
                         .setHorizontalAlignment(HorizontalAlignment.CENTER);
                 TextColumnBuilder<Long> totalCol = Columns.column("Total", "total", DataTypes.longType());
-                
-                
+
                 ResultSet result = conn.query("select pd.menu, sum(pd.jumlah) as jumlah, m.harga, sum(pd.jumlah) as humlah, sum(pd.jumlah*m.harga) as total from penjualan_detail pd\n" +
 "left join menu m\n" +
 "on pd.menu = m.nama left join penjualan p on p.penjualan_id = pd.penjualan_id where p.penjualan_tanggal='"+date+"' and p.meja='"+tableNumber+"' and p.ispaid = 0 group by menu", null);
                 
-                report
+                report                        
                         .setColumnTitleStyle(columnTitleStyle)
                         .highlightDetailEvenRows()
                         .setSubtotalStyle(boldCenteredStyle)
@@ -289,16 +402,30 @@ public class PaymentPrintUI extends javax.swing.JPanel {
                                 totalCol.setHorizontalTextAlignment(HorizontalTextAlignment.CENTER)
                         )
                         .title (
+                                Components.horizontalList()
+                                    .add(
+                                        Components.image(getClass().getResourceAsStream("../images/exit.png")).setFixedDimension(40, 40),
+                                        Components.text("Restoran Hanif").setStyle(titleStyle).setHorizontalAlignment(HorizontalAlignment.LEFT),
+                                        Components.text("<Tanggal Sekarang>").setStyle(titleStyle).setHorizontalAlignment(HorizontalAlignment.RIGHT)
+                                    ),                                  
                                 Components.text("Pesanan Meja "+tableNumber).setStyle(boldCenteredStyle)
                         )
                         .pageFooter(Components.pageXofY().setStyle(boldCenteredStyle))
                         .subtotalsAtSummary(DynamicReports.sbt.sum(totalCol))
+                        .summary(Components.text("Pajak 10% : Rp. "+tax).setHorizontalAlignment(HorizontalAlignment.RIGHT))
+                        .summary(Components.text("Biaya Servis : Rp. "+service).setHorizontalAlignment(HorizontalAlignment.RIGHT))
+                        .summary(Components.text("Total : Rp. "+totalwCharges).setHorizontalAlignment(HorizontalAlignment.RIGHT))
+                        .summary(Components.text("Jumlah yang dibayar : Rp. "+paid).setHorizontalAlignment(HorizontalAlignment.RIGHT))
+                        .summary(Components.text("Kembalian : Rp. "+paid.subtract(totalwCharges)).setHorizontalAlignment(HorizontalAlignment.RIGHT))
                         .setDataSource(result);
                
+                //langsung print
+                //report.print(true);
+                
                 JasperViewer viewer = new JasperViewer(report.toJasperPrint(), false);
                 viewer.setExtendedState(JFrame.MAXIMIZED_BOTH);
                 viewer.setTitle("Cetak Pembayaran");
-                viewer.setVisible(true);
+                viewer.setVisible(true);                
             } catch (SQLException ex) {
                 Logger.getLogger(OrderUI.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -314,12 +441,22 @@ public class PaymentPrintUI extends javax.swing.JPanel {
     private javax.swing.JButton btnMinimize;
     private javax.swing.JButton btnPay;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JLabel lblTotal;
     private javax.swing.JTable tblPayment;
+    private javax.swing.JTextField tfPaid;
+    private javax.swing.JTextField tfService;
+    private javax.swing.JTextField tfTax;
+    private javax.swing.JTextField tfTotal;
     // End of variables declaration//GEN-END:variables
 }

@@ -9,6 +9,7 @@ package company.pos.cashier;
 import company.pos.database.MysqlConnect;
 import company.pos.util.Session;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -87,10 +88,11 @@ on pd.menu = m.nama */
         return null;
     }
     
-    public boolean pay (String tableNum, BigDecimal total) {
+    public boolean pay (String tableNum, BigInteger total, BigInteger paid) {
         MysqlConnect conn = MysqlConnect.getDbCon();
         if (conn != null) {
-            String query = "update penjualan set total ="+total.toString()+" ,ispaid=1 ,operator='"+Session.getUserLoggedIn()+"' where meja="+tableNum;             
+            BigInteger ret = paid.subtract(total);
+            String query = "update penjualan set total ="+total+" ,ispaid=1 ,operator='"+Session.getUserLoggedIn()+"', dibayar="+paid+", kembalian="+ret+" where meja="+tableNum;             
             return conn.updateOrDelete(query);
         }
         return false;

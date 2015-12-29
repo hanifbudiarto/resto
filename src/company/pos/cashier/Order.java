@@ -28,14 +28,15 @@ public class Order {
         this.paramTransaction = new ArrayList<>();
     }
     
-    public int insertOrder (Object [][] order, String date, String table, String note) {
+    public int insertOrder (Object [][] order, String date, String table, String note, String waiter) {
         MysqlConnect conn = MysqlConnect.getDbCon();        
         if (conn != null) { 
-            String query = "INSERT INTO PENJUALAN (penjualan_tanggal, meja, catatan) VALUES (?,?,?)";
+            String query = "INSERT INTO PENJUALAN (penjualan_tanggal, meja, catatan, pelayan) VALUES (?,?,?,?)";
             parameter.clear();
             parameter.add(date);
             parameter.add(table);
             parameter.add(note);
+            parameter.add(waiter);
             try {
                 boolean result = conn.insert(query, parameter);
                 if (result) {

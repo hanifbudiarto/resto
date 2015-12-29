@@ -71,8 +71,10 @@ public class LoginUI extends javax.swing.JPanel {
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Sistem Manajemen Restoran v1.0"));
 
         tfPassword.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        tfPassword.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         tfUsername.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        tfUsername.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         tfUsername.setToolTipText("username");
         tfUsername.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

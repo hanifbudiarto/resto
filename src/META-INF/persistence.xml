@@ -13,9 +13,13 @@
     <class>company.pos.admin.Pengguna</class>
     <class>company.pos.admin.MenuKategori</class>
     <class>company.pos.admin.Menu</class>
+    <class>company.pos.admin.Pelayan</class>
+    <class>company.pos.admin.Pengaturan</class>
+    <class>company.pos.admin.Charges_1</class>
+    <class>company.pos.admin.Charges</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/resto?zeroDateTimeBehavior=convertToNull"/>
-      <property name="javax.persistence.jdbc.password" value=""/>
+      <property name="javax.persistence.jdbc.password" value="root"/>
       <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
       <property name="javax.persistence.jdbc.user" value="root"/>
     </properties>

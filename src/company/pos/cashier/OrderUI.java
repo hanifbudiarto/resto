@@ -7,6 +7,7 @@
 package company.pos.cashier;
 
 import company.pos.admin.Menu;
+import company.pos.admin.Pelayan;
 import company.pos.database.MysqlConnect;
 import company.pos.util.FrameUtil;
 import company.pos.util.TableUtil;
@@ -58,6 +59,7 @@ public class OrderUI extends javax.swing.JPanel {
     public OrderUI() {
         initComponents();
         this.initCBMenu();
+        this.initCBWaiters();
         this.initDatePicker();
         this.initOrderTable();
         
@@ -135,6 +137,23 @@ public class OrderUI extends javax.swing.JPanel {
         cbMenu.setModel(model);
     }
 
+    private void initCBWaiters () {
+        AutoCompleteDecorator.decorate(cbPelayan);
+        try {
+            this.populateWaiters();
+        } catch (SQLException ex) {
+            Logger.getLogger(OrderUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void populateWaiters () throws SQLException {
+        ResultSet rset = new Pelayan().getAllPelayan();
+        DefaultComboBoxModel<String> model  = new DefaultComboBoxModel<>();
+        while (rset.next()) {
+            model.addElement(rset.getString(2));
+        }
+        cbPelayan.setModel(model);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -168,6 +187,8 @@ public class OrderUI extends javax.swing.JPanel {
         dpTanggal = new org.jdesktop.swingx.JXDatePicker();
         jLabel3 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
+        cbPelayan = new javax.swing.JComboBox();
+        jLabel6 = new javax.swing.JLabel();
 
         jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -246,6 +267,10 @@ public class OrderUI extends javax.swing.JPanel {
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel8.setText("MENU UTAMA");
 
+        cbPelayan.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        jLabel6.setText("Pelayan");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -254,11 +279,14 @@ public class OrderUI extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jSeparator1)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(btnHome, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(217, 323, Short.MAX_VALUE))
+                                .addGap(217, 246, Short.MAX_VALUE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -286,15 +314,15 @@ public class OrderUI extends javax.swing.JPanel {
                                         .addGap(207, 207, 207))
                                     .addComponent(jScrollPane2))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel7)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(cbPelayan, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnSave))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -314,7 +342,7 @@ public class OrderUI extends javax.swing.JPanel {
                         .addComponent(jLabel1)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(dpTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(tfMeja, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -333,9 +361,12 @@ public class OrderUI extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbPelayan, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6)
+                    .addComponent(btnSave, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -360,7 +391,7 @@ public class OrderUI extends javax.swing.JPanel {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnMinimize, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -409,9 +440,9 @@ public class OrderUI extends javax.swing.JPanel {
             System.out.println(date);
         
             TableUtil tblUtil = new TableUtil(tblOrder);        
-            int order = new Order().insertOrder(tblUtil.getTableData(), date, tfMeja.getText(), taCatatan.getText());
+            int order = new Order().insertOrder(tblUtil.getTableData(), date, tfMeja.getText(), taCatatan.getText(), cbPelayan.getSelectedItem().toString());
             if (order >= 0) {                          
-                this.showOrderPdf(order, tfMeja.getText(), taCatatan.getText());
+                this.showOrderPdf(order, tfMeja.getText(), taCatatan.getText(), cbPelayan.getSelectedItem().toString());
                 tfMeja.setText("");
                 taCatatan.setText("");
                 modelOrderTable = (DefaultTableModel)tblOrder.getModel();
@@ -423,7 +454,7 @@ public class OrderUI extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnSaveActionPerformed
 
-    private void showOrderPdf (int orderid, String tableNum, String note) {
+    private void showOrderPdf (int orderid, String tableNum, String note, String waiter) {
         try {
             MysqlConnect conn = MysqlConnect.getDbCon();
             JasperReportBuilder report = DynamicReports.report();
@@ -455,10 +486,11 @@ public class OrderUI extends javax.swing.JPanel {
                         )
                         .groupBy(categoryCol)
                         .title (
-                                Components.text("Pesanan Meja "+tableNum+"\n").setStyle(boldCenteredStyle)
+                                Components.text("Pesanan Meja "+tableNum).setStyle(boldCenteredStyle),
+                                Components.text("Pelayan : "+waiter+"\n").setStyle(boldCenteredStyle)
                         )
                         .pageFooter(Components.pageXofY().setStyle(boldCenteredStyle))
-                        .summary(Components.text("Catatan : \n"+note))
+                        .summary(Components.text("Catatan : "+note))
                         .setDataSource(result);
                
                 JasperViewer viewer = new JasperViewer(report.toJasperPrint(), false);
@@ -502,12 +534,14 @@ public class OrderUI extends javax.swing.JPanel {
     private javax.swing.JButton btnMinimize;
     private javax.swing.JButton btnSave;
     private javax.swing.JComboBox cbMenu;
+    private javax.swing.JComboBox cbPelayan;
     private org.jdesktop.swingx.JXDatePicker dpTanggal;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
