@@ -165,6 +165,9 @@
           </Layout>
           <SubComponents>
             <Component class="org.jdesktop.swingx.JXDatePicker" name="dpFrom">
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="dpFromActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel1">
               <Properties>

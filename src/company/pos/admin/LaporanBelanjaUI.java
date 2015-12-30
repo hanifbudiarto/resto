@@ -73,6 +73,12 @@ public class LaporanBelanjaUI extends javax.swing.JPanel {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Laporan Belanja"));
 
+        dpFrom.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dpFromActionPerformed(evt);
+            }
+        });
+
         jLabel1.setText("Dari Tanggal");
 
         btnCreateReport.setText("Lihat Laporan");
@@ -216,6 +222,10 @@ public class LaporanBelanjaUI extends javax.swing.JPanel {
             Logger.getLogger(LaporanBelanjaUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnCreateReportActionPerformed
+
+    private void dpFromActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dpFromActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_dpFromActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

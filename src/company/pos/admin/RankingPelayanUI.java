@@ -13,6 +13,7 @@ import java.awt.Frame;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -30,6 +31,15 @@ public class RankingPelayanUI extends javax.swing.JPanel {
      */
     public RankingPelayanUI() {
         initComponents();
+        initDatepicker();
+    }
+    
+    private void initDatepicker () {
+        dpFrom.setDate(new Date());
+        dpFrom.setFormats(new String[] { "dd-MM-yyyy" });
+        
+        dpTo.setDate(new Date());
+        dpTo.setFormats(new String[] { "dd-MM-yyyy" });
     }
 
     /**
