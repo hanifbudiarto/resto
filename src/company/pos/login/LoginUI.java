@@ -24,9 +24,6 @@ import org.jdesktop.swingx.prompt.PromptSupport;
  */
 public class LoginUI extends javax.swing.JPanel {
 
-    /**
-     * Creates new form asa
-     */
     public LoginUI() {
         initComponents();
         tfUsername.requestFocus();
@@ -82,7 +79,7 @@ public class LoginUI extends javax.swing.JPanel {
             }
         });
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/company/pos/images/login.png"))); // NOI18N
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/login.png"))); // NOI18N
 
         btnLogin.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnLogin.setText("Login");
@@ -187,15 +184,15 @@ public class LoginUI extends javax.swing.JPanel {
                 JPanel nextPanel = null;
                 switch (StringUtils.lowerCase(category)){
                     case "kasir":
-                    nextPanel = new CashierUI();
+                        nextPanel = new CashierUI();
                     break;
                     case "admin":
-                    nextPanel = new AdminPageUI();
+                        nextPanel = new AdminPageUI();
                     break;
                 }
                 FrameUtil.changeUI(nextPanel, (JFrame) SwingUtilities.getWindowAncestor(this));
             }
-            else JOptionPane.showMessageDialog(this, "Gagal!");
+            else JOptionPane.showMessageDialog(this, "Username tidak terdaftar!");
         }
         else {
             JOptionPane.showMessageDialog(this, "Username atau Password tidak cocok!");

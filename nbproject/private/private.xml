@@ -3,17 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Hanif/Project/resto/src/company/pos/cashier/CashierUI.java</file>
             <file>file:/D:/Hanif/Project/resto/src/company/pos/admin/AdminPageUI.java</file>
-            <file>file:/D:/Hanif/Project/resto/src/company/pos/admin/PenggunaUI.java</file>
-            <file>file:/D:/Hanif/Project/resto/src/company/pos/cashier/Order.java</file>
-            <file>file:/D:/Hanif/Project/resto/src/company/pos/admin/Menu.java</file>
-            <file>file:/D:/Hanif/Project/resto/src/company/pos/admin/PelayanUI.java</file>
-            <file>file:/D:/Hanif/Project/resto/src/company/pos/admin/Charges.java</file>
+            <file>file:/D:/Hanif/Project/resto/src/company/pos/cashier/CashierUI.java</file>
+            <file>file:/D:/Hanif/Project/resto/src/company/pos/login/LoginUI.java</file>
+            <file>file:/D:/Hanif/Project/resto/src/Main.java</file>
             <file>file:/D:/Hanif/Project/resto/src/company/pos/cashier/PaymentPrintUI.java</file>
-            <file>file:/D:/Hanif/Project/resto/src/company/pos/admin/MenuKategoriUI.java</file>
-            <file>file:/D:/Hanif/Project/resto/src/company/pos/admin/Pelayan.java</file>
-            <file>file:/D:/Hanif/Project/resto/src/company/pos/cashier/OrderUI.java</file>
         </group>
     </open-files>
 </project-private>

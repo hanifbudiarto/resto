@@ -16,6 +16,10 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -174,7 +178,7 @@ public class PaymentPrintUI extends javax.swing.JPanel {
             }
         });
 
-        btnHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/company/pos/images/Back.png"))); // NOI18N
+        btnHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/Back.png"))); // NOI18N
         btnHome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnHomeActionPerformed(evt);
@@ -364,59 +368,59 @@ public class PaymentPrintUI extends javax.swing.JPanel {
     }//GEN-LAST:event_btnPayActionPerformed
 
     private void showOrderPdf () {
-        try {
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        Date tgl = new Date();
+        try {            
             BigInteger totalwCharges = new BigInteger(tfTotal.getText());
             MysqlConnect conn = MysqlConnect.getDbCon();
             JasperReportBuilder report = DynamicReports.report();
-            report.setPageFormat(300, 700, PageOrientation.PORTRAIT);
+            report.setPageFormat(200, 700, PageOrientation.PORTRAIT);
             try {
-                StyleBuilder boldStyle = DynamicReports.stl.style().bold();
-                StyleBuilder boldCenteredStyle = DynamicReports.stl.style(boldStyle)
-                        .setHorizontalAlignment(HorizontalAlignment.CENTER);
-                StyleBuilder columnTitleStyle = DynamicReports.stl.style(boldCenteredStyle)
-                        .setBorder(DynamicReports.stl.pen1Point())
-                        .setBackgroundColor(Color.LIGHT_GRAY);
-                
-                StyleBuilder titleStyle = DynamicReports.stl.style(boldCenteredStyle)
-	                             .setVerticalAlignment(VerticalAlignment.MIDDLE)
-	                             .setFontSize(12);
+                StyleBuilder standarStyle = DynamicReports.stl.style()
+                        .setFontSize(8)
+                        .setHorizontalAlignment(HorizontalAlignment.CENTER)
+                        .setVerticalAlignment(VerticalAlignment.MIDDLE);
 
-                TextColumnBuilder<Integer> rowNumberColumn = DynamicReports.col.reportRowNumberColumn("No. ")
-                        .setFixedColumns(2)
-                        .setHorizontalAlignment(HorizontalAlignment.CENTER);
-                TextColumnBuilder<Long> totalCol = Columns.column("Total", "total", DataTypes.longType());
+                StyleBuilder titleStyle = DynamicReports.stl.style(standarStyle)
+                        //.setBorder(DynamicReports.stl.pen1Point())
+                        .setBackgroundColor(Color.LIGHT_GRAY);
+
+//                TextColumnBuilder<Integer> rowNumberColumn = DynamicReports.col.reportRowNumberColumn("No. ")
+//                        .setFixedColumns(2)
+//                        .setHorizontalAlignment(HorizontalAlignment.CENTER);
+                TextColumnBuilder<Integer> totalCol = Columns.column("Total", "total", DataTypes.integerType());
 
                 ResultSet result = conn.query("select pd.menu, sum(pd.jumlah) as jumlah, m.harga, sum(pd.jumlah) as humlah, sum(pd.jumlah*m.harga) as total from penjualan_detail pd\n" +
 "left join menu m\n" +
 "on pd.menu = m.nama left join penjualan p on p.penjualan_id = pd.penjualan_id where p.penjualan_tanggal='"+date+"' and p.meja='"+tableNumber+"' and p.ispaid = 0 group by menu", null);
                 
                 report                        
-                        .setColumnTitleStyle(columnTitleStyle)
+                        .setColumnTitleStyle(titleStyle)
                         .highlightDetailEvenRows()
-                        .setSubtotalStyle(boldCenteredStyle)
+                        .setSubtotalStyle(standarStyle)
                         .columns(
-                                rowNumberColumn,
-                                Columns.column("Menu yang dipesan", "menu", DataTypes.stringType()).setHorizontalTextAlignment(HorizontalTextAlignment.CENTER),
-                                Columns.column("Jumlah", "jumlah", DataTypes.longType()).setHorizontalTextAlignment(HorizontalTextAlignment.CENTER),
-                                Columns.column("Harga", "harga", DataTypes.longType()).setHorizontalTextAlignment(HorizontalTextAlignment.CENTER),
-                                totalCol.setHorizontalTextAlignment(HorizontalTextAlignment.CENTER)
+                                Columns.column("Menu", "menu", DataTypes.stringType()).setStyle(standarStyle),
+                                Columns.column("Jumlah", "jumlah", DataTypes.stringType()).setStyle(standarStyle),
+                                Columns.column("Harga", "harga", DataTypes.stringType()).setStyle(standarStyle),
+                                totalCol.setStyle(standarStyle)
                         )
                         .title (
                                 Components.horizontalList()
                                     .add(
-                                        Components.image(getClass().getResourceAsStream("../images/exit.png")).setFixedDimension(40, 40),
-                                        Components.text("Restoran Hanif").setStyle(titleStyle).setHorizontalAlignment(HorizontalAlignment.LEFT),
-                                        Components.text("<Tanggal Sekarang>").setStyle(titleStyle).setHorizontalAlignment(HorizontalAlignment.RIGHT)
+                                        Components.image(getClass().getResource("/resources/icon.png")).setFixedDimension(49, 40),
+                                        // Components.text("Restoran Hanif").setStyle(titleStyle).setHorizontalAlignment(HorizontalAlignment.LEFT),
+                                        Components.text(dateFormat.format(tgl)).setStyle(standarStyle).setHorizontalAlignment(HorizontalAlignment.RIGHT)
                                     ),                                  
-                                Components.text("Pesanan Meja "+tableNumber).setStyle(boldCenteredStyle)
+                                Components.text("Meja "+tableNumber).setStyle(standarStyle)
                         )
-                        .pageFooter(Components.pageXofY().setStyle(boldCenteredStyle))
+                        .pageFooter(Components.pageXofY().setStyle(standarStyle))
                         .subtotalsAtSummary(DynamicReports.sbt.sum(totalCol))
-                        .summary(Components.text("Pajak 10% : Rp. "+tax).setHorizontalAlignment(HorizontalAlignment.RIGHT))
-                        .summary(Components.text("Biaya Servis : Rp. "+service).setHorizontalAlignment(HorizontalAlignment.RIGHT))
-                        .summary(Components.text("Total : Rp. "+totalwCharges).setHorizontalAlignment(HorizontalAlignment.RIGHT))
-                        .summary(Components.text("Jumlah yang dibayar : Rp. "+paid).setHorizontalAlignment(HorizontalAlignment.RIGHT))
-                        .summary(Components.text("Kembalian : Rp. "+paid.subtract(totalwCharges)).setHorizontalAlignment(HorizontalAlignment.RIGHT))
+                        .summary(Components.text("\n"))
+                        .summary(Components.text("Pajak (10%) : Rp. "+tax).setStyle(standarStyle).setHorizontalAlignment(HorizontalAlignment.RIGHT))
+                        .summary(Components.text("Biaya Servis : Rp. "+service).setStyle(standarStyle).setHorizontalAlignment(HorizontalAlignment.RIGHT))
+                        .summary(Components.text("Total : Rp. "+totalwCharges).setStyle(standarStyle).setHorizontalAlignment(HorizontalAlignment.RIGHT))
+                        .summary(Components.text("Jumlah yang dibayar : Rp. "+paid).setStyle(standarStyle).setHorizontalAlignment(HorizontalAlignment.RIGHT))
+                        .summary(Components.text("Kembalian : Rp. "+paid.subtract(totalwCharges)).setStyle(standarStyle).setHorizontalAlignment(HorizontalAlignment.RIGHT))
                         .setDataSource(result);
                
                 //langsung print

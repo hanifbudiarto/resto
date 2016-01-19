@@ -144,7 +144,7 @@ public class PenggunaUI extends JPanel {
         saveButton.setText("Save");
         saveButton.addActionListener(formListener);
 
-        btnHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/company/pos/images/home.png"))); // NOI18N
+        btnHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/home.png"))); // NOI18N
         btnHome.addActionListener(formListener);
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N

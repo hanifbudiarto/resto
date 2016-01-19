@@ -104,7 +104,7 @@ public class MenuKategoriUI extends JPanel {
         saveButton.setText("Simpan");
         saveButton.addActionListener(formListener);
 
-        btnHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/company/pos/images/home.png"))); // NOI18N
+        btnHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/home.png"))); // NOI18N
         btnHome.addActionListener(formListener);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N

@@ -186,21 +186,21 @@ public class KitchenUI extends javax.swing.JPanel {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Belanja"));
 
-        btnHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/company/pos/images/home.png"))); // NOI18N
+        btnHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/home.png"))); // NOI18N
         btnHome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnHomeActionPerformed(evt);
             }
         });
 
-        btnAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/company/pos/images/add.png"))); // NOI18N
+        btnAdd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/add.png"))); // NOI18N
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddActionPerformed(evt);
             }
         });
 
-        btnEditMode.setIcon(new javax.swing.ImageIcon(getClass().getResource("/company/pos/images/delete.png"))); // NOI18N
+        btnEditMode.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/delete.png"))); // NOI18N
         btnEditMode.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEditModeActionPerformed(evt);
@@ -427,7 +427,7 @@ public class KitchenUI extends javax.swing.JPanel {
                         .setFixedColumns(2)
                         .setHorizontalAlignment(HorizontalAlignment.CENTER);
                 
-                SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                 String date = formatter.format(dpTanggal.getDate());
                 
                 ResultSet result = conn.query("select pd.nama_barang, pd.satuan, pd.harga, pd.jumlah, pd.harga*pd.jumlah as total, date_format(p.timestamp,\"%d %M %y %H:%i:%s\") as waktu from pembelian_detail pd\n" +
@@ -454,7 +454,7 @@ public class KitchenUI extends javax.swing.JPanel {
                         .title (
                                 Components.text("Belanja Tanggal "+date+"\n").setStyle(boldCenteredStyle)
                         )
-                        .summary(Components.text("Timestamp: "+datetime))
+                        .summary(Components.text(datetime))
                         .pageFooter(Components.pageXofY().setStyle(boldCenteredStyle))
                         .subtotalsAtSummary(DynamicReports.sbt.sum(totalCol))
                         .setDataSource(result);

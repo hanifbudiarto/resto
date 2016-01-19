@@ -116,7 +116,7 @@ public class PelayanUI extends JPanel {
         saveButton.setText("Save");
         saveButton.addActionListener(formListener);
 
-        btnHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/company/pos/images/home.png"))); // NOI18N
+        btnHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/home.png"))); // NOI18N
         btnHome.addActionListener(formListener);
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -237,7 +237,13 @@ public class PelayanUI extends JPanel {
     private class FormListener implements java.awt.event.ActionListener {
         FormListener() {}
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            if (evt.getSource() == newButton) {
+            if (evt.getSource() == btnMinimize) {
+                PelayanUI.this.btnMinimizeActionPerformed(evt);
+            }
+            else if (evt.getSource() == btnExit) {
+                PelayanUI.this.btnExitActionPerformed(evt);
+            }
+            else if (evt.getSource() == newButton) {
                 PelayanUI.this.newButtonActionPerformed(evt);
             }
             else if (evt.getSource() == deleteButton) {
@@ -248,12 +254,6 @@ public class PelayanUI extends JPanel {
             }
             else if (evt.getSource() == saveButton) {
                 PelayanUI.this.saveButtonActionPerformed(evt);
-            }
-            else if (evt.getSource() == btnMinimize) {
-                PelayanUI.this.btnMinimizeActionPerformed(evt);
-            }
-            else if (evt.getSource() == btnExit) {
-                PelayanUI.this.btnExitActionPerformed(evt);
             }
             else if (evt.getSource() == btnHome) {
                 PelayanUI.this.btnHomeActionPerformed(evt);
