@@ -39,7 +39,9 @@ import net.sf.dynamicreports.report.builder.component.Components;
 import net.sf.dynamicreports.report.builder.datatype.DataTypes;
 import net.sf.dynamicreports.report.builder.style.StyleBuilder;
 import net.sf.dynamicreports.report.constant.HorizontalAlignment;
+import net.sf.dynamicreports.report.constant.VerticalAlignment;
 import net.sf.dynamicreports.report.constant.HorizontalTextAlignment;
+import net.sf.dynamicreports.report.constant.PageOrientation;
 import net.sf.dynamicreports.report.exception.DRException;
 import net.sf.jasperreports.view.JasperViewer;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
@@ -193,6 +195,7 @@ public class OrderUI extends javax.swing.JPanel {
         jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         btnMinimize.setBackground(new java.awt.Color(255, 255, 204));
+        btnMinimize.setFocusPainted(false);
         btnMinimize.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMinimizeActionPerformed(evt);
@@ -200,6 +203,7 @@ public class OrderUI extends javax.swing.JPanel {
         });
 
         btnExit.setBackground(new java.awt.Color(255, 204, 204));
+        btnExit.setFocusPainted(false);
         btnExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExitActionPerformed(evt);
@@ -229,7 +233,6 @@ public class OrderUI extends javax.swing.JPanel {
 
         jLabel1.setText("Nomor Meja");
 
-        btnSave.setBackground(new java.awt.Color(204, 255, 204));
         btnSave.setText("Simpan Pesanan");
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -436,8 +439,7 @@ public class OrderUI extends javax.swing.JPanel {
         }   
         else {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");        
-            String date = formatter.format(dpTanggal.getDate());
-            System.out.println(date);
+            String date = formatter.format(dpTanggal.getDate());           
         
             TableUtil tblUtil = new TableUtil(tblOrder);        
             int order = new Order().insertOrder(tblUtil.getTableData(), date, tfMeja.getText(), taCatatan.getText(), cbPelayan.getSelectedItem().toString());
@@ -458,39 +460,44 @@ public class OrderUI extends javax.swing.JPanel {
         try {
             MysqlConnect conn = MysqlConnect.getDbCon();
             JasperReportBuilder report = DynamicReports.report();
+            report.setPageFormat(200, 700, PageOrientation.PORTRAIT);
             try {
-                StyleBuilder boldStyle = DynamicReports.stl.style().bold();
-                StyleBuilder boldCenteredStyle = DynamicReports.stl.style(boldStyle)
-                        .setHorizontalAlignment(HorizontalAlignment.CENTER);
-                StyleBuilder columnTitleStyle = DynamicReports.stl.style(boldCenteredStyle)
-                        .setBorder(DynamicReports.stl.pen1Point())
+                StyleBuilder standarStyle = DynamicReports.stl.style()
+                        .setFontSize(8)
+                        .setHorizontalAlignment(HorizontalAlignment.CENTER)
+                        .setVerticalAlignment(VerticalAlignment.MIDDLE);
+
+                StyleBuilder titleStyle = DynamicReports.stl.style(standarStyle)
                         .setBackgroundColor(Color.LIGHT_GRAY);
                 
-//                TextColumnBuilder<Integer> rowNumberColumn = DynamicReports.col.reportRowNumberColumn("No. ")
-//                        .setFixedColumns(2)
-//                        .setHorizontalAlignment(HorizontalAlignment.CENTER);
+                StyleBuilder standarItalicStyle = DynamicReports.stl.style(standarStyle)
+                        .italic()
+                        .setHorizontalAlignment(HorizontalAlignment.LEFT);
                 
-                TextColumnBuilder<String> categoryCol = Columns.column("Kategori",       "nama",      DataTypes.stringType()).setStyle(boldStyle);
+                TextColumnBuilder<String> categoryCol = Columns.column("Kategori", "nama", DataTypes.stringType()).setStyle(standarStyle);
                 ResultSet result = conn.query("select mk.nama, pd.menu, sum(pd.jumlah) as jumlah from penjualan_detail pd left join menu m on m.nama =\n" +
 "pd.menu left join menu_kategori mk on m.kategori_id = mk.kategori_id " +
 " where pd.penjualan_id ="+orderid+" group by pd.menu order by mk.nama \n", null);
                 
                 report
-                        .setColumnTitleStyle(columnTitleStyle)
+                        .setColumnTitleStyle(titleStyle)
                         .highlightDetailEvenRows()
                         .columns(
-//                                rowNumberColumn,
-                                categoryCol,
-                                Columns.column("Menu yang dipesan", "menu", DataTypes.stringType()).setHorizontalTextAlignment(HorizontalTextAlignment.CENTER),
-                                Columns.column("Jumlah", "jumlah", DataTypes.longType()).setHorizontalTextAlignment(HorizontalTextAlignment.CENTER)
+                                categoryCol.setStyle(standarItalicStyle),
+                                Columns.column("Menu yang dipesan", "menu", DataTypes.stringType()).setStyle(standarStyle),
+                                Columns.column("Jumlah", "jumlah", DataTypes.longType()).setStyle(standarStyle)
                         )
                         .groupBy(categoryCol)
                         .title (
-                                Components.text("Pesanan Meja "+tableNum).setStyle(boldCenteredStyle),
-                                Components.text("Pelayan : "+waiter+"\n").setStyle(boldCenteredStyle)
+                                Components.horizontalList()
+                                .add(
+                                    Components.image(getClass().getResource("/resources/icon.png")).setFixedDimension(49, 40),
+                                    Components.text("Meja "+tableNum).setStyle(standarStyle),
+                                    Components.text("Pelayan : "+waiter+"\n").setStyle(standarStyle)
+                                )
                         )
-                        .pageFooter(Components.pageXofY().setStyle(boldCenteredStyle))
-                        .summary(Components.text("Catatan : "+note))
+                        .pageFooter(Components.pageXofY().setStyle(standarStyle))
+                        .summary(Components.text("Catatan : "+note).setStyle(standarItalicStyle))
                         .setDataSource(result);
                
                 JasperViewer viewer = new JasperViewer(report.toJasperPrint(), false);

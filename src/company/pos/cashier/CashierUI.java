@@ -47,6 +47,7 @@ public class CashierUI extends javax.swing.JPanel {
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         btnExit.setBackground(new java.awt.Color(255, 204, 204));
+        btnExit.setFocusPainted(false);
         btnExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExitActionPerformed(evt);
@@ -54,6 +55,7 @@ public class CashierUI extends javax.swing.JPanel {
         });
 
         btnMinimize.setBackground(new java.awt.Color(255, 255, 204));
+        btnMinimize.setFocusPainted(false);
         btnMinimize.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMinimizeActionPerformed(evt);

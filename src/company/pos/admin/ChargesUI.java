@@ -1,17 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package company.pos.admin;
 
 import company.pos.util.FrameUtil;
-import java.awt.EventQueue;
 import java.awt.Frame;
 import java.beans.Beans;
 import java.util.ArrayList;
-
 import java.util.List;
 import javax.persistence.RollbackException;
 import javax.swing.JFrame;
@@ -67,9 +59,11 @@ public class ChargesUI extends JPanel {
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         btnMinimize.setBackground(new java.awt.Color(255, 255, 204));
+        btnMinimize.setFocusPainted(false);
         btnMinimize.addActionListener(formListener);
 
         btnExit.setBackground(new java.awt.Color(255, 204, 204));
+        btnExit.setFocusPainted(false);
         btnExit.addActionListener(formListener);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Biaya Tambahan"));
@@ -280,7 +274,7 @@ public class ChargesUI extends JPanel {
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         int[] selected = masterTable.getSelectedRows();
-        List<company.pos.admin.Charges> toRemove = new ArrayList<company.pos.admin.Charges>(selected.length);
+        List<company.pos.admin.Charges> toRemove = new ArrayList<>(selected.length);
         for (int idx = 0; idx < selected.length; idx++) {
             company.pos.admin.Charges c = list.get(masterTable.convertRowIndexToModel(selected[idx]));
             toRemove.add(c);
@@ -303,9 +297,8 @@ public class ChargesUI extends JPanel {
             entityManager.getTransaction().commit();
             entityManager.getTransaction().begin();
         } catch (RollbackException rex) {
-            rex.printStackTrace();
             entityManager.getTransaction().begin();
-            List<company.pos.admin.Charges> merged = new ArrayList<company.pos.admin.Charges>(list.size());
+            List<company.pos.admin.Charges> merged = new ArrayList<>(list.size());
             for (company.pos.admin.Charges c : list) {
                 merged.add(entityManager.merge(c));
             }

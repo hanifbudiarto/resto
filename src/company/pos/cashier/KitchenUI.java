@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package company.pos.cashier;
 
 import company.pos.database.MysqlConnect;
@@ -39,6 +33,7 @@ import net.sf.dynamicreports.report.builder.component.Components;
 import net.sf.dynamicreports.report.builder.datatype.DataTypes;
 import net.sf.dynamicreports.report.builder.style.StyleBuilder;
 import net.sf.dynamicreports.report.constant.HorizontalAlignment;
+import net.sf.dynamicreports.report.constant.VerticalAlignment;
 import net.sf.dynamicreports.report.constant.HorizontalTextAlignment;
 import net.sf.dynamicreports.report.exception.DRException;
 import net.sf.jasperreports.view.JasperViewer;
@@ -73,7 +68,6 @@ public class KitchenUI extends javax.swing.JPanel {
                 JTable table =(JTable) me.getSource();
                 Point p = me.getPoint();
                 int row = table.rowAtPoint(p);
-                System.err.println("row "+row);
                 if (me.getClickCount() == 2) {                   
                     int dialogButton = JOptionPane.YES_NO_OPTION;
                     int dialogResult = JOptionPane.showConfirmDialog (null, "Hapus baris ini?","Peringatan",dialogButton);
@@ -171,6 +165,7 @@ public class KitchenUI extends javax.swing.JPanel {
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         btnMinimize.setBackground(new java.awt.Color(255, 255, 204));
+        btnMinimize.setFocusPainted(false);
         btnMinimize.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMinimizeActionPerformed(evt);
@@ -178,6 +173,7 @@ public class KitchenUI extends javax.swing.JPanel {
         });
 
         btnExit.setBackground(new java.awt.Color(255, 204, 204));
+        btnExit.setFocusPainted(false);
         btnExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExitActionPerformed(evt);
@@ -397,7 +393,6 @@ public class KitchenUI extends javax.swing.JPanel {
                 }
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");        
                 String date = formatter.format(dpTanggal.getDate());
-                System.out.println(date);
                 TableUtil tblUtil = new TableUtil(tblBelanja);        
                 int orderid = new Kitchen().insertLogistic(tblUtil.getTableData(), date, lblTotalAll.getText());
                 if (orderid>=0) {   
@@ -418,7 +413,8 @@ public class KitchenUI extends javax.swing.JPanel {
             try {
                 StyleBuilder boldStyle = DynamicReports.stl.style().bold();
                 StyleBuilder boldCenteredStyle = DynamicReports.stl.style(boldStyle)
-                        .setHorizontalAlignment(HorizontalAlignment.CENTER);
+                        .setHorizontalAlignment(HorizontalAlignment.CENTER)
+                        .setVerticalAlignment(VerticalAlignment.MIDDLE);
                 StyleBuilder columnTitleStyle = DynamicReports.stl.style(boldCenteredStyle)
                         .setBorder(DynamicReports.stl.pen1Point())
                         .setBackgroundColor(Color.LIGHT_GRAY);
@@ -427,7 +423,7 @@ public class KitchenUI extends javax.swing.JPanel {
                         .setFixedColumns(2)
                         .setHorizontalAlignment(HorizontalAlignment.CENTER);
                 
-                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM yyyy");
                 String date = formatter.format(dpTanggal.getDate());
                 
                 ResultSet result = conn.query("select pd.nama_barang, pd.satuan, pd.harga, pd.jumlah, pd.harga*pd.jumlah as total, date_format(p.timestamp,\"%d %M %y %H:%i:%s\") as waktu from pembelian_detail pd\n" +
@@ -452,7 +448,11 @@ public class KitchenUI extends javax.swing.JPanel {
                                 totalCol
                         )
                         .title (
-                                Components.text("Belanja Tanggal "+date+"\n").setStyle(boldCenteredStyle)
+                                Components.horizontalList()
+                                .add(
+                                    Components.image(getClass().getResource("/resources/icon.png")).setFixedDimension(49, 40),
+                                    Components.text("Belanja Tanggal "+date).setStyle(boldCenteredStyle)
+                                )
                         )
                         .summary(Components.text(datetime))
                         .pageFooter(Components.pageXofY().setStyle(boldCenteredStyle))

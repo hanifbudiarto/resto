@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package company.pos.cashier;
 
 import company.pos.admin.Charges;
@@ -17,7 +11,6 @@ import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
@@ -34,7 +27,6 @@ import net.sf.dynamicreports.report.builder.component.Components;
 import net.sf.dynamicreports.report.builder.datatype.DataTypes;
 import net.sf.dynamicreports.report.builder.style.StyleBuilder;
 import net.sf.dynamicreports.report.constant.HorizontalAlignment;
-import net.sf.dynamicreports.report.constant.HorizontalTextAlignment;
 import net.sf.dynamicreports.report.constant.PageOrientation;
 import net.sf.dynamicreports.report.constant.VerticalAlignment;
 import net.sf.dynamicreports.report.exception.DRException;
@@ -147,6 +139,7 @@ public class PaymentPrintUI extends javax.swing.JPanel {
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         btnMinimize.setBackground(new java.awt.Color(255, 255, 204));
+        btnMinimize.setFocusPainted(false);
         btnMinimize.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMinimizeActionPerformed(evt);
@@ -154,6 +147,7 @@ public class PaymentPrintUI extends javax.swing.JPanel {
         });
 
         btnExit.setBackground(new java.awt.Color(255, 204, 204));
+        btnExit.setFocusPainted(false);
         btnExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExitActionPerformed(evt);
@@ -355,16 +349,23 @@ public class PaymentPrintUI extends javax.swing.JPanel {
     private void btnPayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPayActionPerformed
         paid = new BigInteger (tfPaid.getText());
         BigInteger totalwCharges = new BigInteger(tfTotal.getText());
-        showOrderPdf();
-        boolean result = payment.pay(tableNumber, totalwCharges, paid);        
-        if (result) {
-            JOptionPane.showMessageDialog(this, "Berhasil!");            
-            DefaultTableModel dtm = (DefaultTableModel) tblPayment.getModel();
-            dtm.setRowCount(0);
-            tblPayment.setModel(dtm);
-            btnPay.setEnabled(false);
+        if (paid.compareTo(totalwCharges) < 0 ) {
+            JOptionPane.showMessageDialog(this, "Jumlah uang yang dibayarkan kurang!"); 
         }
-        else { JOptionPane.showMessageDialog(this, "Gagal!"); }
+        else {
+            showOrderPdf();
+            boolean result = payment.pay(tableNumber, totalwCharges, paid);        
+            if (result) {
+                JOptionPane.showMessageDialog(this, "Berhasil!");            
+                DefaultTableModel dtm = (DefaultTableModel) tblPayment.getModel();
+                dtm.setRowCount(0);
+                tblPayment.setModel(dtm);
+                btnPay.setEnabled(false);
+            }
+            else { 
+                JOptionPane.showMessageDialog(this, "Gagal!"); 
+            }
+        }        
     }//GEN-LAST:event_btnPayActionPerformed
 
     private void showOrderPdf () {
@@ -382,12 +383,8 @@ public class PaymentPrintUI extends javax.swing.JPanel {
                         .setVerticalAlignment(VerticalAlignment.MIDDLE);
 
                 StyleBuilder titleStyle = DynamicReports.stl.style(standarStyle)
-                        //.setBorder(DynamicReports.stl.pen1Point())
                         .setBackgroundColor(Color.LIGHT_GRAY);
 
-//                TextColumnBuilder<Integer> rowNumberColumn = DynamicReports.col.reportRowNumberColumn("No. ")
-//                        .setFixedColumns(2)
-//                        .setHorizontalAlignment(HorizontalAlignment.CENTER);
                 TextColumnBuilder<Integer> totalCol = Columns.column("Total", "total", DataTypes.integerType());
 
                 ResultSet result = conn.query("select pd.menu, sum(pd.jumlah) as jumlah, m.harga, sum(pd.jumlah) as humlah, sum(pd.jumlah*m.harga) as total from penjualan_detail pd\n" +

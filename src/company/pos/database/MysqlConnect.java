@@ -57,25 +57,9 @@ public class MysqlConnect {
         if (param!=null) { for (int i=0; i<param.size(); i++) {
             statement.setString(i+1, param.get(i));            
         }}
-        System.out.println(statement);
         return statement.executeQuery();
     }
-    /**
-     * @desc Method to insert data to a table
-     * @param insertQuery String The Insert query
-     * @return boolean
-     */
-//    public int insert(String insertQuery){
-//        try {
-//            statement = db.conn.createStatement();
-//            int result = statement.executeUpdate(insertQuery);
-//            return result;
-//        } catch (SQLException ex) {
-//            Logger.getLogger(MysqlConnect.class.getName()).log(Level.SEVERE, null, ex);
-//            return 0;
-//        }
-//    }
-    
+
     /**
      *
      * @param query
@@ -90,10 +74,8 @@ public class MysqlConnect {
                 for (int i=0; i<param.size(); i++) {            
                     statement.setString(i+1, param.get(i));
                 }
-            }
-            System.out.println(statement);
-            statement.executeUpdate();
-            System.out.println("Affected "+statement.getUpdateCount());
+            }            
+            statement.executeUpdate();            
             return statement.getUpdateCount()>0;
         } catch (SQLException ex) {
             Logger.getLogger(MysqlConnect.class.getName()).log(Level.SEVERE, null, ex);
@@ -105,11 +87,6 @@ public class MysqlConnect {
         try {
             db.conn.setAutoCommit(false);
             for (int i=0; i<queries.size(); i++) {
-//                if (this.insert(queries.get(i), params.get(i))){
-//                    db.conn.rollback();
-//                    db.conn.setAutoCommit(true);
-//                    return false; 
-//                }
                 boolean insert = this.insert(queries.get(i), params.get(i));
             }
             db.conn.commit();
@@ -129,9 +106,7 @@ public class MysqlConnect {
     
     public boolean updateOrDelete (String query) {
         try {
-//            MysqlConnect.db = new MysqlConnect();
             statementUD = db.conn.createStatement();  
-            System.out.println(query);
             statementUD.executeUpdate(query);
             return true;
         } catch (SQLException ex) {

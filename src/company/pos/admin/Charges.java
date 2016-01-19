@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package company.pos.admin;
 
 import company.pos.database.MysqlConnect;
@@ -38,7 +32,7 @@ import javax.persistence.Transient;
     @NamedQuery(name = "Charges.findByBiaya", query = "SELECT c FROM Charges c WHERE c.biaya = :biaya")})
 public class Charges implements Serializable {
     @Transient
-    private PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
+    private final PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -107,10 +101,7 @@ public class Charges implements Serializable {
             return false;
         }
         Charges other = (Charges) object;
-        if ((this.chargesId == null && other.chargesId != null) || (this.chargesId != null && !this.chargesId.equals(other.chargesId))) {
-            return false;
-        }
-        return true;
+        return (this.chargesId != null || other.chargesId == null) && (this.chargesId == null || this.chargesId.equals(other.chargesId));
     }
 
     @Override

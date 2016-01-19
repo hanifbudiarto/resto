@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package company.pos.report;
 
 import company.pos.database.MysqlConnect;
@@ -22,6 +16,7 @@ import net.sf.dynamicreports.report.builder.component.MultiPageListBuilder;
 import net.sf.dynamicreports.report.builder.datatype.DataTypes;
 import net.sf.dynamicreports.report.builder.style.StyleBuilder;
 import net.sf.dynamicreports.report.constant.HorizontalAlignment;
+import net.sf.dynamicreports.report.constant.VerticalAlignment;
 import net.sf.dynamicreports.report.constant.HorizontalTextAlignment;
 import net.sf.dynamicreports.report.exception.DRException;
 import net.sf.jasperreports.view.JasperViewer;
@@ -42,7 +37,8 @@ public class BelanjaReport {
     public void create() throws SQLException, DRException, ParseException {
         StyleBuilder boldStyle = DynamicReports.stl.style().bold();
         StyleBuilder boldCenteredStyle = DynamicReports.stl.style(boldStyle)
-                .setHorizontalAlignment(HorizontalAlignment.CENTER);
+                .setHorizontalAlignment(HorizontalAlignment.CENTER)
+                .setVerticalAlignment(VerticalAlignment.MIDDLE);
         StyleBuilder columnTitleStyle = DynamicReports.stl.style(boldCenteredStyle)
                 .setBorder(DynamicReports.stl.pen1Point())
                 .setBackgroundColor(Color.LIGHT_GRAY);
@@ -79,7 +75,11 @@ public class BelanjaReport {
                 totalCol
             )
             .title(
-                Components.text("Laporan Belanja Tanggal "+newFormat.format(oldFormat.parse(dateFrom))+" - "+newFormat.format(oldFormat.parse(dateTo))+"\n").setStyle(boldCenteredStyle)
+                Components.horizontalList()
+                .add(
+                    Components.image(getClass().getResource("/resources/icon.png")).setFixedDimension(49, 40),
+                    Components.text("Laporan Belanja Tanggal "+newFormat.format(oldFormat.parse(dateFrom))+" - "+newFormat.format(oldFormat.parse(dateTo))).setStyle(boldCenteredStyle)
+                )                
             )
             .pageFooter(Components.pageXofY().setStyle(boldCenteredStyle))
             .subtotalsAtSummary(DynamicReports.sbt.sum(totalCol))
@@ -108,8 +108,12 @@ public class BelanjaReport {
                     Columns.column("Jumlah", "jumlah", DataTypes.integerType()).setHorizontalTextAlignment(HorizontalTextAlignment.CENTER),
                     totalCol
                 )
-                .title(
-                    Components.text("Detail Laporan Belanja Tanggal "+newFormat.format(oldFormat.parse(dateBelanja))+"\n").setStyle(boldCenteredStyle)
+                .title(                    
+                    Components.horizontalList()
+                    .add(
+                        Components.image(getClass().getResource("/resources/icon.png")).setFixedDimension(49, 40),
+                        Components.text("Detail Laporan Belanja Tanggal "+newFormat.format(oldFormat.parse(dateBelanja))+"\n").setStyle(boldCenteredStyle)
+                    ) 
                 )                
                 .subtotalsAtSummary(DynamicReports.sbt.sum(totalCol))
                 .setDataSource(conn.query(query, null));

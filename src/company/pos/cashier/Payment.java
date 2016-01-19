@@ -1,14 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package company.pos.cashier;
 
 import company.pos.database.MysqlConnect;
 import company.pos.util.Session;
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,14 +14,6 @@ import java.util.logging.Logger;
  * @author Muhammad Hanif B
  */
 public class Payment {
-    /*
-select a.penjualan_id, p.penjualan_tanggal, p.meja, sum(a.total) as total, p.ispaid from (
-select pd.*, m.harga, pd.jumlah*m.harga as total from penjualan_detail pd
-left join menu m
-on pd.menu = m.nama ) as a left join penjualan p
-on a.penjualan_id = p.penjualan_id
-where p.penjualan_tanggal = "2015-10-05"
-group by a.penjualan_id*/
     
     private final ArrayList<String> parameter;
     
@@ -82,9 +67,6 @@ group by a.penjualan_id*/
                 return null;
             }
         }
-        /*select pd.menu, m.harga, pd.jumlah, pd.jumlah*m.harga as total from penjualan_detail pd
-left join menu m
-on pd.menu = m.nama */
         return null;
     }
     

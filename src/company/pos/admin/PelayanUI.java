@@ -1,16 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package company.pos.admin;
 
 import company.pos.util.FrameUtil;
 import java.awt.Frame;
 import java.beans.Beans;
 import java.util.ArrayList;
-
 import java.util.List;
 import javax.persistence.RollbackException;
 import javax.swing.JFrame;
@@ -66,9 +59,11 @@ public class PelayanUI extends JPanel {
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         btnMinimize.setBackground(new java.awt.Color(255, 255, 204));
+        btnMinimize.setFocusPainted(false);
         btnMinimize.addActionListener(formListener);
 
         btnExit.setBackground(new java.awt.Color(255, 204, 204));
+        btnExit.setFocusPainted(false);
         btnExit.addActionListener(formListener);
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Pengelolaan Pelayan"));

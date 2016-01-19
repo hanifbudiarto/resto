@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package company.pos.cashier;
 
 import company.pos.util.FrameUtil;
@@ -14,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -132,6 +125,7 @@ public class PaymentUI extends javax.swing.JPanel {
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         btnMinimize1.setBackground(new java.awt.Color(255, 255, 204));
+        btnMinimize1.setFocusPainted(false);
         btnMinimize1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMinimize1ActionPerformed(evt);
@@ -139,6 +133,7 @@ public class PaymentUI extends javax.swing.JPanel {
         });
 
         btnExit1.setBackground(new java.awt.Color(255, 204, 204));
+        btnExit1.setFocusPainted(false);
         btnExit1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExit1ActionPerformed(evt);
