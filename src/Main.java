@@ -1,7 +1,11 @@
 import company.pos.login.LoginUI;
 import company.pos.util.FrameUtil;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 
 /**
  *
@@ -12,6 +16,8 @@ public class Main extends javax.swing.JFrame {
     /**
      * Creates new form Main
      */
+    private static Point point = new Point();
+    
     public Main() {
         initComponents();
         Image image = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/resources/icon.png"));
@@ -31,6 +37,7 @@ public class Main extends javax.swing.JFrame {
     private void initComponents() {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -77,7 +84,22 @@ public class Main extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new Main().setVisible(true);
+                final Main frame = new Main();
+                frame.addMouseListener(new MouseAdapter() {   
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+                        point.x = e.getX();
+                        point.y = e.getY();
+                    }
+                });
+                frame.addMouseMotionListener(new MouseMotionAdapter() {
+                    @Override
+                    public void mouseDragged(MouseEvent e){
+                        Point p = frame.getLocation();
+                        frame.setLocation(p.x + e.getX() - point.x, p.y + e.getY() - point.y);
+                    }
+                }); 
+                frame.setVisible(true);
             }
         });
     }
