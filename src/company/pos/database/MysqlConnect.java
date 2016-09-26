@@ -32,7 +32,8 @@ public class MysqlConnect {
             Class.forName(driver).newInstance();
             this.conn = (Connection)DriverManager.getConnection(url+dbName,userName,password);
         }
-        catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException sqle) {            
+        catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException sqle) {  
+            Logger.getLogger(MysqlConnect.class.getName()).log(Level.SEVERE, null, sqle);
         }
     }
     /**

@@ -53,7 +53,7 @@ public class Payment {
     public ResultSet getPaymentDetail (String date, String tableNum) {
         MysqlConnect conn = MysqlConnect.getDbCon();        
         if (conn != null) { 
-            String query = "select pd.menu as Menu, m.Harga, sum(pd.jumlah) as Jumlah, sum(pd.jumlah*m.harga) as Total from penjualan_detail pd\n" +
+            String query = "select pd.menu as Menu, m.Harga, sum(pd.jumlah) as Pesan, null as Berat, null as Total from penjualan_detail pd\n" +
             "left join menu m\n" +
             "on pd.menu = m.nama left join penjualan p on p.penjualan_id = pd.penjualan_id where p.penjualan_tanggal=? and p.meja=? and p.ispaid = 0 group by menu";
             parameter.clear();
