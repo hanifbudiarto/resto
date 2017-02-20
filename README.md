@@ -1,5 +1,5 @@
 # resto
-Restaurant POS
+## Restaurant POS
 
-Dekstop GUI : Java Swing
-Reporting   : Jasper Report
+* Dekstop GUI : Java Swing
+* Reporting   : Jasper Report
